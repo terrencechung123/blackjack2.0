@@ -85,7 +85,7 @@ function App() {
     history.push('/blackjack');
   };
 
-  if (!user) return <Login onLogin={handleLogin} user={user} />;
+  if (!user) return <Login onLogin={handleLogin} setUser={setUser} />;
 
   return (
     <div>

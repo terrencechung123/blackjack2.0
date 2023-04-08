@@ -19,12 +19,46 @@ function Blackjack({ user }) {
   const [gameStart, setGameStart] = useState(false);
   const [gameResult, setGameResult] = useState('In Progress');
 
+  const loadGameStateFromLocalStorage = () => {
+    const gameState = JSON.parse(localStorage.getItem('blackjack-game')) || {
+      cards: [],
+      dealerHand: [],
+      userHand: [],
+      gameStart: false,
+      gameResult: 'In Progress',
+    };
+
+    setCards(gameState.cards);
+    setDealerHand(gameState.dealerHand);
+    setUserHand(gameState.userHand);
+    setGameStart(gameState.gameStart !== undefined ? gameState.gameStart : !!gameState.userHand.length);
+    setGameResult(gameState.gameResult);
+  };
+
+  // Call the loadGameStateFromLocalStorage function whenever the component mounts
+  useEffect(() => {
+    loadGameStateFromLocalStorage();
+  }, []);
+
+  // Save the game state to localStorage whenever it changes
+  useEffect(() => {
+    const gameState = {
+      cards,
+      dealerHand,
+      userHand,
+      gameStart,
+      gameResult,
+    };
+    localStorage.setItem('blackjack-game', JSON.stringify(gameState));
+  }, [cards, dealerHand, userHand, gameStart, gameResult]);
+
+
   useEffect(() => {
     fetch("/cards")
     .then((r) => r.json())
     .then((data) => {
       setCards(shuffleArray(data));
-      setGameStart(false);
+      // setGameStart(false);
     });
   }, []);
 
@@ -45,7 +79,7 @@ function Blackjack({ user }) {
     setUserHand(newUserHand);
     console.log('newDealerHand', newDealerHand)
     console.log('newUserHand', newUserHand)
-    const response = await fetch('http://localhost:5555/games', {
+    const response = await fetch('/games', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -59,14 +93,17 @@ function Blackjack({ user }) {
     });
     const data = await response.json();
     console.log(data); // This will log the newly created game object
+    setGameStart(true);
   }
 
   async function hit() {
     const newUserHand = [...userHand];
     newUserHand.push(cards.pop());
     setUserHand(newUserHand);
-    if (calculateHandValue(newUserHand) > 21) {
-      setGameResult('You Lost');
+    // if (calculateHandValue(newUserHand) > 21) {
+    //   setGameResult('You Lost');
+    //}
+    
       // endGame();
     // } else {
       // const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
@@ -83,7 +120,6 @@ function Blackjack({ user }) {
       // });
       // const data = await response.json();
       // console.log(data);
-    }
   }
 
   function calculateHandValue(cards) {
@@ -129,6 +165,10 @@ function Blackjack({ user }) {
               ))}
             </p>
             <Button onClick={hit}>Hit</Button>
+            <Button onClick={() => {
+            startNewGame();
+            setGameStart(true);
+          }}>Start new game</Button>
             </Box>
       ) : (
         <Box>
