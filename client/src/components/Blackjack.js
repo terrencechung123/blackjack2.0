@@ -100,26 +100,23 @@ function Blackjack({ user }) {
     const newUserHand = [...userHand];
     newUserHand.push(cards.pop());
     setUserHand(newUserHand);
-    // if (calculateHandValue(newUserHand) > 21) {
-    //   setGameResult('You Lost');
-    //}
     
-      // endGame();
-    // } else {
-      // const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
-      // const { id } = useParams();
-      // const response = await fetch(`http://localhost:5555/games/${id}`, {
-      //   method: 'PUT',
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   },
-      //   body: JSON.stringify({
-      //     user_hand: userHandNames,
-      //     result:gameResult,
-      //   })
-      // });
-      // const data = await response.json();
-      // console.log(data);
+  //   const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
+  //   const { id } = useParams(); // get the game id from the URL params
+  
+  //   const response = await fetch(`/games/${id}`, {
+  //     method: 'PATCH', // use the PATCH method to update the existing game
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({
+  //       user_hand: userHandNames,
+  //       result: calculateHandValue(newUserHand) > 21 ? 'You Lost' : 'In Progress', // set the game result based on the user's hand value
+  //     })
+  //   });
+  
+  //   const data = await response.json();
+  //   console.log(data);
   }
 
   function calculateHandValue(cards) {
@@ -141,6 +138,7 @@ function Blackjack({ user }) {
 
   return (
     <>
+    
         <Wrapper>
           {gameStart ? (
             <Box>
