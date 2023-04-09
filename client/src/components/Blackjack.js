@@ -42,6 +42,12 @@ function Blackjack({ user }) {
     loadGameStateFromLocalStorage();
   }, []);
 
+  useEffect(() => {
+    const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
+    if (storedGame) {
+      setGame(storedGame);
+    }
+  }, []);
   // Save the game state to localStorage whenever it changes
   useEffect(() => {
     const gameState = {
@@ -50,9 +56,10 @@ function Blackjack({ user }) {
       userHand,
       gameStart,
       gameResult,
+      game,
     };
     localStorage.setItem('blackjack-game', JSON.stringify(gameState));
-  }, [cards, dealerHand, userHand, gameStart, gameResult]);
+  }, [cards, dealerHand, userHand, gameStart, gameResult, game]);
 
 
   useEffect(() => {
