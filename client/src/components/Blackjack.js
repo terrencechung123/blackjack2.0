@@ -18,6 +18,7 @@ function Blackjack({ user }) {
   const [userHand, setUserHand] = useState([]);
   const [gameStart, setGameStart] = useState(false);
   const [gameResult, setGameResult] = useState('In Progress');
+  const [isGameOver, setIsGameOver] = useState(false);
 
   const loadGameStateFromLocalStorage = () => {
     const gameState = JSON.parse(localStorage.getItem('blackjack-game')) || {
@@ -94,6 +95,7 @@ function Blackjack({ user }) {
     const data = await response.json();
     console.log(data); // This will log the newly created game object
     setGameStart(true);
+    setIsGameOver(false);
   }
 
   async function hit() {
@@ -136,6 +138,46 @@ function Blackjack({ user }) {
           return sum;
         }
 
+  async function stand({game}) {
+    const newDealerHand = [...dealerHand];
+    newDealerHand[1] = cards.pop(); // reveal the dealer's hidden card
+    while (calculateHandValue(newDealerHand) < 17) {
+      newDealerHand.push(cards.pop()); // keep drawing cards until the dealer's hand value is at least 17
+    }
+    setDealerHand(newDealerHand);
+    const userHandValue = calculateHandValue(userHand);
+    const dealerHandValue = calculateHandValue(newDealerHand);
+    let result;
+    if (userHandValue > 21) {
+      result = 'You Lost';
+    } else if (dealerHandValue > 21) {
+      result = 'You Won';
+    } else if (dealerHandValue > userHandValue) {
+      result = 'You Lost';
+    } else if (userHandValue > dealerHandValue) {
+      result = 'You Won';
+    } else {
+      result = 'Tie';
+    }
+    setGameResult(result);
+    setIsGameOver(true);
+    // const dealerHandNames = JSON.stringify(newDealerHand.map(card => card.name));
+    // const userHandNames = JSON.stringify(userHand.map(card => card.name));
+          // const response = await fetch(`/games/${game.id}`, {
+          //   method: 'PATCH',
+          //   headers: {
+          //     'Content-Type': 'application/json'
+          //   },
+          //   body: JSON.stringify({
+          //     dealer_hand: dealerHandNames,
+          //     result: result,
+          //     user_hand: userHandNames
+          //   })
+          // });
+          // const data = await response.json();
+          // console.log(data);
+        }
+
   return (
     <>
     
@@ -152,6 +194,7 @@ function Blackjack({ user }) {
                 />
               ))}
             </p>
+            )}
             <p>
               User:{" "}
               {userHand.map((card, index) => (
@@ -162,7 +205,15 @@ function Blackjack({ user }) {
                 />
               ))}
             </p>
+            {isGameOver ? (
+              <h1>game is over</h1>,
+              <h1>Sum of user's cards: {calculateHandValue(userHand)}</h1>,
+              <h1>{gameResult}</h1>
+            ) : (
+              <h1>game is not over</h1>
+            )}
             <Button onClick={hit}>Hit</Button>
+            <Button onClick={stand}>Stand</Button>
             <Button onClick={() => {
             startNewGame();
             setGameStart(true);
@@ -227,12 +278,12 @@ export default Blackjack;
                 //   }
                 //   setDealerHand(newDealerHand);
                 //   setIsGameOver(true);
+                // }
                 //   await fetch('/cards', {
                   //     method: 'PUT',
                   //     headers: { 'Content-Type': 'application/json' },
                   //     body: JSON.stringify({ cards })
                   //   });
-                  // }
 
                   // function calculateHandValue(cards) {
                     //   let sum = 0;
