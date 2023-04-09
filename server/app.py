@@ -106,6 +106,22 @@ class GameById(Resource):
         db.session.delete(game)
         db.session.commit()
         return make_response({}, 204)
+
+    def patch(self, id):
+        game = Game.query.filter_by(id=id).first()
+        if not game:
+            return make_response({
+                "error": "Game not found"
+            }, 404)
+        data = request.get_json()
+        for attr in data:
+            setattr(game, attr, data[attr])
+        db.session.add(game)
+        db.session.commit()
+        return make_response(
+            game.to_dict(),
+            202
+        )
 api.add_resource(GameById, '/games/<int:id>')
 
 
