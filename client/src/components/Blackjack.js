@@ -111,9 +111,8 @@ function Blackjack({ user }) {
     const newUserHand = [...userHand];
     newUserHand.push(cards.pop());
     setUserHand(newUserHand);
-    let result;
     if (calculateHandValue(newUserHand) > 21) {
-      result = 'Bust!'
+      const result = 'Bust!'
       console.log('hitUser', user)
       setIsGameOver(true);
       const userHandNames = JSON.stringify(userHand.map(card => card.name));
