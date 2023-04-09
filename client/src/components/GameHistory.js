@@ -59,9 +59,9 @@ function GameHistory() {
               <Button onClick={() => handleDeleteGame(game.id)} style={{marginRight: "10px", backgroundColor: "#4E79D4", color: "white"}}>
                 Delete game
               </Button>
-              <Button as={Link} to={`/update/${game.id}/edit`}>
+              {/* <Button as={Link} to={`/update/${game.id}/edit`}>
                 Update Game
-              </Button>
+              </Button> */}
             </Box>
           </Game>
         ))

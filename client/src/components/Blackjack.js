@@ -166,7 +166,7 @@ function Blackjack({ user }) {
     }
     setGameResult(result);
     setIsGameOver(true);
-    const dealerHandNames = JSON.stringify(dealerHand.map(card => card.name));
+    const dealerHandNames = JSON.stringify(newDealerHand.map(card => card.name));
     const userHandNames = JSON.stringify(userHand.map(card => card.name));
     console.log('standDealerHand', dealerHandNames)
     console.log('standUserHand', userHandNames)
