@@ -89,12 +89,12 @@ function Blackjack({ user }) {
       body: JSON.stringify({
         dealer_hand: dealerHandNames,
         user_hand: userHandNames,
-        result:gameResult,
+        result:'In Progress',
         user_id:user.id
       })
     });
     const data = await response.json();
-    console.log(data); // This will log the newly created game object
+    console.log('startingData',data); // This will log the newly created game object
     setGame(data);
     setGameStart(true);
     setIsGameOver(false);
@@ -107,23 +107,6 @@ function Blackjack({ user }) {
     if (calculateHandValue(newUserHand) > 21) {
       setIsGameOver(true);
     }
-    
-  //   const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
-  //   const { id } = useParams(); // get the game id from the URL params
-  
-  //   const response = await fetch(`/games/${id}`, {
-  //     method: 'PATCH', // use the PATCH method to update the existing game
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       user_hand: userHandNames,
-  //       result: calculateHandValue(newUserHand) > 21 ? 'You Lost' : 'In Progress', // set the game result based on the user's hand value
-  //     })
-  //   });
-  
-  //   const data = await response.json();
-  //   console.log(data);
   }
 
   function calculateHandValue(cards) {
@@ -214,9 +197,9 @@ function Blackjack({ user }) {
               ))}
             </p>
             {isGameOver ? (
-              <h1>game is over</h1>,
-              <h1>Sum of user's cards: {calculateHandValue(userHand)}</h1>,
+              <>
               <h1>{gameResult}</h1>
+              </>
             ) : (
               <>
             <Button onClick={hit}>Hit</Button>
