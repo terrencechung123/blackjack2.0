@@ -104,10 +104,28 @@ function Blackjack({ user }) {
     const newUserHand = [...userHand];
     newUserHand.push(cards.pop());
     setUserHand(newUserHand);
+    let result;
     if (calculateHandValue(newUserHand) > 21) {
+      result = 'Bust!'
+      console.log('hitUser', user)
       setIsGameOver(true);
+      const userHandNames = JSON.stringify(userHand.map(card => card.name));
+      const response = await fetch(`/games/${game.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          result: result,
+          user_hand: userHandNames,
+          user_id: user.id
+        })
+      });
+      const data = await response.json();
+      console.log(data);
+        }
     }
-  }
+  
 
   function calculateHandValue(cards) {
     let sum = 0;
