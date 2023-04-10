@@ -54,7 +54,7 @@ function Blackjack({ user }) {
       };
       localStorage.setItem('blackjack-game', JSON.stringify(gameState));
     }
-  }, [cards, dealerHand, userHand, gameResult, isGameOver, game]);
+  }, [cards, dealerHand, userHand, gameResult, isGameOver, game, gameStart]);
 
 
 

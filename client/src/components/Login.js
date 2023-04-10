@@ -49,14 +49,14 @@ function Login({ setUser }) {
             <h1>{signup?'Create An Account':'Login'}</h1>
             <h2 style={{color:'red'}}> {formik.errors.username}</h2>
             {error&& <h2 style={{color:'red'}}> {error}</h2>}
-            <button onClick={handleClick}>{signup?'Already have an account? Log in':'New here? Sign up'}</button>
             <form onSubmit={formik.handleSubmit}>
                 <label >Username</label>
                 <input type="text"  name="username" value={formik.values.username} onChange={formik.handleChange} />
                 <label >Password</label>
                 <input type="password"  name="password" value={formik.values.password} onChange={formik.handleChange} />
-                <input type='submit' value={signup?'Create Account!':'Log In!'} />
+                <input type='submit' value={signup?'Create Account':'Log In'} />
             </form>
+            <button onClick={handleClick}>{signup?'Already have an account? Log in':'Don\'t have an account? Sign up'}</button>
 
         </div>
     );
