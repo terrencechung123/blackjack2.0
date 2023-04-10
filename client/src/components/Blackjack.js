@@ -73,6 +73,16 @@ function Blackjack({ user }) {
   console.log("gameStart",gameStart);
 
   async function startNewGame() {
+    const deck = [...cards];
+
+    // Remove the cards that have already been dealt in the current game
+    [...dealerHand, ...userHand].forEach(card => {
+      const index = deck.findIndex(c => c.code === card.code);
+      if (index !== -1) {
+        deck.splice(index, 1);
+      }
+    });
+    
     const newDealerHand = [cards.pop(), '*'];
     const newUserHand = [cards.pop(), cards.pop()];
     const dealerHandNames = JSON.stringify(newDealerHand.map(card => card.name));
@@ -100,17 +110,34 @@ function Blackjack({ user }) {
     setGameStart(true);
     setIsGameOver(false);
   }
-
+  
   async function hit() {
     const newUserHand = [...userHand];
     newUserHand.push(cards.pop());
+  
+    // Update the game state to reflect the new card being added to the user's hand
+    const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
+    const response = await fetch(`/games/${game.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_hand: userHandNames,
+        user_id: user.id
+      })
+    });
+    const data = await response.json();
+    setGame(data);
     setUserHand(newUserHand);
+  
     if (calculateHandValue(newUserHand) > 21) {
       const result = 'Bust!'
       setGameResult(result);
       console.log('hitUser', user)
+      console.log('newUserHandHit', newUserHand)
       setIsGameOver(true);
-      const userHandNames = JSON.stringify(userHand.map(card => card.name));
+      const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
       const response = await fetch(`/games/${game.id}`, {
         method: 'PATCH',
         headers: {
@@ -124,8 +151,8 @@ function Blackjack({ user }) {
       });
       const data = await response.json();
       console.log(data);
-        }
     }
+  }
   
 
   function calculateHandValue(cards) {
