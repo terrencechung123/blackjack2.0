@@ -69,7 +69,7 @@ function GameHistory() {
         <>
           <h3>No Games Found</h3>
           <Button as={Link} to="/blackjack">
-            Make a New Game
+          Go To Game Page
           </Button>
         </>
       )}

@@ -82,7 +82,7 @@ function Blackjack({ user }) {
         deck.splice(index, 1);
       }
     });
-    
+
     const newDealerHand = [cards.pop(), '*'];
     const newUserHand = [cards.pop(), cards.pop()];
     const dealerHandNames = JSON.stringify(newDealerHand.map(card => card.name));
@@ -222,6 +222,10 @@ function Blackjack({ user }) {
         <Wrapper>
           {gameStart ? (
             <Box>
+            <Button onClick={() => {
+            startNewGame();
+            setGameStart(true);
+          }}>Start new game</Button>
             <p>
               Dealer:{" "}
               {dealerHand.map((card, index) => (
@@ -253,10 +257,6 @@ function Blackjack({ user }) {
 
               </>
             )}
-            <Button onClick={() => {
-            startNewGame();
-            setGameStart(true);
-          }}>Start new game</Button>
             </Box>
       ) : (
         <Box>
