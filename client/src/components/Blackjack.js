@@ -33,10 +33,6 @@ function Blackjack({ user }) {
     }
   }, []);
 
-  // Call the loadGameStateFromLocalStorage function whenever the component mounts
-  // useEffect(() => {
-  //   loadGameStateFromLocalStorage();
-  // }, []);
 
   useEffect(() => {
     const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
@@ -67,7 +63,6 @@ function Blackjack({ user }) {
     .then((r) => r.json())
     .then((data) => {
       setCards(shuffleArray(data));
-      // setGameStart(false);
     });
   }, []);
 
@@ -78,10 +73,8 @@ function Blackjack({ user }) {
   console.log("gameStart",gameStart);
 
   async function startNewGame() {
-    // localStorage.removeItem('blackjack-game');
     const newDealerHand = [cards.pop(), '*'];
     const newUserHand = [cards.pop(), cards.pop()];
-
     const dealerHandNames = JSON.stringify(newDealerHand.map(card => card.name));
     const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
 
