@@ -48,7 +48,7 @@ const Wrapper = styled.header`
 const Logo = styled.h1`
   font-family: 'Press Start 2P', cursive;
   font-size: 3rem;
-  color: #4E79D4;
+  color: #000;
   margin: 0;
   line-height: 1;
   a {
