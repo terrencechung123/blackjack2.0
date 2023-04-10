@@ -58,6 +58,7 @@ function Blackjack({ user }) {
   }, [cards, dealerHand, userHand, gameResult, isGameOver, game]);
 
 
+
   useEffect(() => {
     fetch("/cards")
     .then((r) => r.json())

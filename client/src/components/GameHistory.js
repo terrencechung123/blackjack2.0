@@ -53,8 +53,8 @@ function GameHistory() {
             <Box>
               <h2>{"Game "+game.id}</h2>
               <h3>{"User: "+game.user.username}</h3>
-              <h3>{"Dealer Hand: "+game.dealer_hand}</h3>
-              <h3>{"User Hand: "+game.user_hand}</h3>
+              <h3>{"Dealer Hand: " + (game.dealer_hand ? game.dealer_hand.replace(/[[\]]/g, "").replace(/"/g, '').replace(/,/g, ', ') : "hidden card")}</h3>
+              <h3>{"User Hand: " + (game.user_hand ? game.user_hand.replace(/[[\]]/g, "").replace(/"/g, '').replace(/,/g, ', ') : "hidden card")}</h3>
               <h3>{"Result: "+game.result}</h3>
               <Button onClick={() => handleDeleteGame(game.id)} style={{marginRight: "10px", backgroundColor: "#4E79D4", color: "white"}}>
                 Delete game
