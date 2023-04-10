@@ -26,7 +26,6 @@ function Blackjack({ user }) {
       setCards(gameState.cards);
       setDealerHand(gameState.dealerHand);
       setUserHand(gameState.userHand);
-      // setGameStart(gameState.gameStart !== undefined ? gameState.gameStart : !!gameState.userHand.length);
       setGameResult(gameState.gameResult);
       setIsGameOver(gameState.isGameOver)
       setGame(gameState.game);
@@ -111,11 +110,11 @@ function Blackjack({ user }) {
     setGameStart(true);
     setIsGameOver(false);
   }
-  
+
   async function hit() {
     const newUserHand = [...userHand];
     newUserHand.push(cards.pop());
-  
+
     // Update the game state to reflect the new card being added to the user's hand
     const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
     const response = await fetch(`/games/${game.id}`, {
@@ -131,7 +130,7 @@ function Blackjack({ user }) {
     const data = await response.json();
     setGame(data);
     setUserHand(newUserHand);
-  
+
     if (calculateHandValue(newUserHand) > 21) {
       const result = 'Bust!'
       setGameResult(result);
@@ -154,7 +153,7 @@ function Blackjack({ user }) {
       console.log(data);
     }
   }
-  
+
 
   function calculateHandValue(cards) {
     let sum = 0;
@@ -219,7 +218,7 @@ function Blackjack({ user }) {
 
   return (
     <>
-    
+
         <Wrapper>
           {gameStart ? (
             <Box>

@@ -26,25 +26,7 @@ function GameHistory() {
     });
   }
 
-  // function handleUpdateGame(newGame){
-  //   setGames(games => [...games, newGame])
-  // }
-
-  // async function updateGame(){
-  //   const updateData = {
-  //     result: formData.result,
-  //     card_id: formData.card_id,
-  //     user_id: formData.user_id
-  //   }
-  // }
-
-
-
-
-
-
   return (
-
     <Wrapper>
     <h1 style={{ fontSize: "2rem", fontFamily: "'Press Start 2P', cursive" }}>Games</h1>
       {games.length > 0 ? (
@@ -60,9 +42,6 @@ function GameHistory() {
               <Button onClick={() => handleDeleteGame(game.id)} style={{marginRight: "10px", backgroundColor: "#4E79D4", color: "white"}}>
                 Delete game
               </Button>
-              {/* <Button as={Link} to={`/update/${game.id}/edit`}>
-                Update Game
-              </Button> */}
             </Box>
           </Game>
         ))
