@@ -307,7 +307,7 @@ function Blackjack({ user }) {
             )}
             </Box>
       ) : (
-        <Box>
+        <Box style ={{marginTop:"50px"}}>
           <Button onClick={() => {
             startNewGame();
             setGameStart(true);
