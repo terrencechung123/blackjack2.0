@@ -287,24 +287,24 @@ function Blackjack({ user }) {
               ))}
             </p>
             {isGameOver ? (
-              <>
-              <h1>{gameResult}</h1>
-              <Button onClick={() => {
-            startNewGame();
-            setGameStart(true);
-          }}>Start new game</Button>
-              </>
-            ) : (
-              <>
-            <Button onClick={hit}>Hit</Button>
-            <Button onClick={stand}>Stand</Button>
-            {/* <Button onClick={() => {
-            startNewGame();
-            setGameStart(true);
-          }}>Start new game</Button> */}
-
-              </>
-            )}
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <h1>{gameResult}</h1>
+    <Button onClick={() => {
+      startNewGame();
+      setGameStart(true);
+    }}>Start new game</Button>
+  </div>
+) : (
+  <div style={{ display: "flex", justifyContent: "center" }}>
+    <div style={{ marginRight: "20px" }}>
+      <Button onClick={hit}>Hit</Button>
+    </div>
+    <div style={{ marginLeft: "20px" }}>
+      <Button onClick={stand}>Stand</Button>
+    </div>
+  </div>
+)}
+            
             </Box>
       ) : (
         <Box style ={{marginTop:"50px"}}>
