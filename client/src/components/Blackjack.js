@@ -266,8 +266,8 @@ function Blackjack({ user }) {
             startNewGame();
             setGameStart(true);
           }}>Start new game</Button> */}
+            <h3>Dealer: </h3>
             <p>
-              Dealer:{" "}
               {dealerHand.map((card, index) => (
                 <img
                   key={index}
@@ -276,8 +276,8 @@ function Blackjack({ user }) {
                 />
               ))}
             </p>
+            <h3>User: </h3>
             <p>
-              User:{" "}
               {userHand.map((card, index) => (
                 <img
                   key={index}
