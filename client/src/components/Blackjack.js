@@ -16,21 +16,61 @@ function Blackjack({ user }) {
   const [dealerHand, setDealerHand] = useState([]);
   const [userHand, setUserHand] = useState([]);
   const [gameStart, setGameStart] = useState(false);
-  const [gameResult, setGameResult] = useState('In Progress');
+  const [gameResult, setGameResult] = useState('');
   const [isGameOver, setIsGameOver] = useState(false);
   const [game, setGame] = useState([])
 
+  const [games,setGames] = useState([])
+
   useEffect(() => {
     const gameState = JSON.parse(localStorage.getItem('blackjack-game'));
+
     if (gameState) {
-      setCards(gameState.cards);
-      setDealerHand(gameState.dealerHand);
-      setUserHand(gameState.userHand);
-      setGameResult(gameState.gameResult);
-      setIsGameOver(gameState.isGameOver)
-      setGame(gameState.game);
+      fetch(`/games/${gameState.game.id}`)
+        .then(r => r.json())
+        .then(data => {
+          console.log('gameState data', data);
+          setGames(data);
+          if (data.id === gameState.game.id) {
+            setCards(gameState.cards);
+            setDealerHand(gameState.dealerHand);
+            setUserHand(gameState.userHand);
+            setGameResult(gameState.gameResult);
+            setIsGameOver(gameState.isGameOver);
+            setGame(gameState.game);
+          } else {
+            setGameStart(false);
+            setIsGameOver(true);
+          }
+        });
     }
   }, []);
+
+//   const [game, setGame] = useState([]);
+// const [games, setGames] = useState([]);
+
+// useEffect(() => {
+//   const gameState = JSON.parse(localStorage.getItem('blackjack-game'));
+
+//   if (gameState) {
+//     fetch(`/games/${gameState.game.id}`)
+//       .then(r => r.json())
+//       .then(data => {
+//         setGames(data);
+//         if (data.find(g => g.id === gameState.game.id)) {
+//           setCards(gameState.cards);
+//           setDealerHand(gameState.dealerHand);
+//           setUserHand(gameState.userHand);
+//           setGameResult(gameState.gameResult);
+//           setIsGameOver(gameState.isGameOver);
+//           setGame(gameState.game);
+//         } else {
+//           setGameStart(false);
+//           setIsGameOver(true);
+//         }
+//       });
+//   }
+// }, []);
 
 
   useEffect(() => {
@@ -222,10 +262,10 @@ function Blackjack({ user }) {
         <Wrapper>
           {gameStart ? (
             <Box>
-            <Button onClick={() => {
+            {/* <Button onClick={() => {
             startNewGame();
             setGameStart(true);
-          }}>Start new game</Button>
+          }}>Start new game</Button> */}
             <p>
               Dealer:{" "}
               {dealerHand.map((card, index) => (
@@ -249,11 +289,19 @@ function Blackjack({ user }) {
             {isGameOver ? (
               <>
               <h1>{gameResult}</h1>
+              <Button onClick={() => {
+            startNewGame();
+            setGameStart(true);
+          }}>Start new game</Button>
               </>
             ) : (
               <>
             <Button onClick={hit}>Hit</Button>
             <Button onClick={stand}>Stand</Button>
+            {/* <Button onClick={() => {
+            startNewGame();
+            setGameStart(true);
+          }}>Start new game</Button> */}
 
               </>
             )}
