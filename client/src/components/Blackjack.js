@@ -231,7 +231,7 @@ function Blackjack({ user }) {
     } else if (userHandValue > dealerHandValue) {
       result = 'You Won!';
     } else {
-      result = 'Tie';
+      result = 'Tie!';
     }
     setGameResult(result);
     setIsGameOver(true);

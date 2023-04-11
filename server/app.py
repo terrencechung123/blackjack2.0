@@ -5,7 +5,6 @@ from flask_cors import CORS
 
 from config import app, db, api
 from models import User, Card, Game, Game_Cards
-
 CORS(app)
 class Signup(Resource):
     def post(self):

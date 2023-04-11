@@ -80,18 +80,4 @@ with app.app_context():
     db.session.add_all(cards)
     db.session.commit()
 
-    # create games
-    games = [
-        Game(user_id=1, result='Win'),
-        Game(user_id=1, result='Loss'),
-        Game(user_id=3, result='Tie'),
-        Game(user_id=4, result='Win')
-    ]
-    games[0].cards = [cards[0], cards[15], cards[20]]
-    games[1].cards = [cards[0], cards[4], cards[5]]
-    games[2].cards = [cards[10], cards[11], cards[6]]
-    games[3].cards = [cards[9], cards[7], cards[8]]
-    db.session.add_all(games)
-    db.session.commit()
-
     print("Database seeded successfully!")

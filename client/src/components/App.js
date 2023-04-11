@@ -36,7 +36,7 @@ function App() {
             <Profile user={user}/>
           </Route>
           <Route path="/game_history">
-            <GameHistory/>
+            <GameHistory user={user}/>
           </Route>
           <Route path="/blackjack">
             <Blackjack user={user}/>

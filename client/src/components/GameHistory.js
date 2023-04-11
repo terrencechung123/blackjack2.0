@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Box, Button } from "../styles";
 
-function GameHistory() {
+function GameHistory({user}) {
+  console.log('user',user)
   const [games, setGames] = useState([]);
 
 
@@ -31,20 +32,21 @@ function GameHistory() {
     <h1 style={{ fontSize: "2rem", fontFamily: "'Press Start 2P', cursive" }}>Games</h1>
       {games.length > 0 ? (
         games.map((game) => (
-          <Game key={game.id}>
-            <Box>
-              <h2>{"Game "+game.id}</h2>
-              <h3>{"User: "+game.user.username}</h3>
-              <h3>{"Dealer Hand: " + (game.dealer_hand ? game.dealer_hand.replace(/[[\]]/g, "").replace(/"/g, '').replace(/,/g, ', ').replace(/\bnull\b/g, 'Hidden Card') : "Hidden Card")}</h3>
-
-              <h3>{"User Hand: " + (game.user_hand ? game.user_hand.replace(/[[\]]/g, "").replace(/"/g, '').replace(/,/g, ', ') : "hidden card")}</h3>
-              <h3>{"Result: "+game.result}</h3>
-              <Button onClick={() => handleDeleteGame(game.id)} style={{marginRight: "10px", backgroundColor: "#4E79D4", color: "white"}}>
-                Delete game
-              </Button>
-            </Box>
-          </Game>
-        ))
+  <Game key={game.id}>
+    <Box>
+      <h2>{"Game "+game.id}</h2>
+      <h3>{"User: "+game.user.username}</h3>
+      <h3>{"Dealer Hand: " + (game.dealer_hand ? game.dealer_hand.replace(/[[\]]/g, "").replace(/"/g, '').replace(/,/g, ', ').replace(/\bnull\b/g, 'Hidden Card') : "Hidden Card")}</h3>
+      <h3>{"User Hand: " + (game.user_hand ? game.user_hand.replace(/[[\]]/g, "").replace(/"/g, '').replace(/,/g, ', ') : "hidden card")}</h3>
+      <h3>{"Result: "+game.result}</h3>
+      {game.user.id === user.id && (
+        <Button onClick={() => handleDeleteGame(game.id)} style={{marginRight: "10px", backgroundColor: "#d12d36", color: "white"}}>
+          Delete game
+        </Button>
+      )}
+    </Box>
+  </Game>
+  ))
       ) : (
         <>
           <h3>No Games Found</h3>
