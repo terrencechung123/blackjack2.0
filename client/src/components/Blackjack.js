@@ -46,33 +46,6 @@ function Blackjack({ user }) {
     }
   }, []);
 
-//   const [game, setGame] = useState([]);
-// const [games, setGames] = useState([]);
-
-// useEffect(() => {
-//   const gameState = JSON.parse(localStorage.getItem('blackjack-game'));
-
-//   if (gameState) {
-//     fetch(`/games/${gameState.game.id}`)
-//       .then(r => r.json())
-//       .then(data => {
-//         setGames(data);
-//         if (data.find(g => g.id === gameState.game.id)) {
-//           setCards(gameState.cards);
-//           setDealerHand(gameState.dealerHand);
-//           setUserHand(gameState.userHand);
-//           setGameResult(gameState.gameResult);
-//           setIsGameOver(gameState.isGameOver);
-//           setGame(gameState.game);
-//         } else {
-//           setGameStart(false);
-//           setIsGameOver(true);
-//         }
-//       });
-//   }
-// }, []);
-
-
   useEffect(() => {
     const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
     if (storedGame) {
