@@ -249,7 +249,7 @@ function Blackjack({ user }) {
                 />
               ))}
             </p>
-            <h3>User: </h3>
+            <h3>{user.username}: </h3>
             <p>
               {userHand.map((card, index) => (
                 <img
@@ -277,7 +277,7 @@ function Blackjack({ user }) {
     </div>
   </div>
 )}
-            
+
             </Box>
       ) : (
         <Box style ={{marginTop:"50px"}}>
@@ -293,7 +293,7 @@ function Blackjack({ user }) {
 }
 
 const Wrapper = styled.section`
-  max-width: 800px;
+  max-width: 100%;
   margin: 40px auto;
   transform: translate(0, 4.5%);
   `;
