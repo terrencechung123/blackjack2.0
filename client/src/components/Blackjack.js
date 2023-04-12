@@ -48,9 +48,14 @@ function Blackjack({ user }) {
 
   useEffect(() => {
     const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
-    if (storedGame) {
+    console.log('storedGame', storedGame)
+    if (storedGame.user.id === user.id) {
       setGame(storedGame);
       setGameStart(true);
+    }
+    else {
+      setGame([]);
+      setGameStart(false);
     }
   }, []);
   // Save the game state to localStorage whenever it changes
