@@ -19,9 +19,9 @@ function Blackjack({ user }) {
   const [gameResult, setGameResult] = useState('');
   const [isGameOver, setIsGameOver] = useState(false);
   const [game, setGame] = useState([])
-
   const [games,setGames] = useState([])
-
+  const [betAmount,setBetAmount] = useState(0)
+  const [funds,setFunds] = useState(1000)
   useEffect(() => {
     const gameState = JSON.parse(localStorage.getItem('blackjack-game'));
 
@@ -233,7 +233,9 @@ function Blackjack({ user }) {
       const data = await response.json();
       console.log(data);
         }
-
+  async function bet(){
+    return console.log('hello')
+  }
   return (
     <>
 
@@ -273,6 +275,8 @@ function Blackjack({ user }) {
     }}>Start new game</Button>
   </div>
 ) : (
+  <div>
+  <h1>Bet Amount: ${betAmount}</h1>
   <div style={{ display: "flex", justifyContent: "center" }}>
     <div style={{ marginRight: "20px" }}>
       <Button onClick={hit}>Hit</Button>
@@ -280,6 +284,10 @@ function Blackjack({ user }) {
     <div style={{ marginLeft: "20px" }}>
       <Button onClick={stand}>Stand</Button>
     </div>
+    <div style={{ marginLeft: "40px" }}>
+      <Button onClick={bet}>Bet</Button>
+    </div>
+  </div>
   </div>
 )}
 
@@ -292,6 +300,7 @@ function Blackjack({ user }) {
           }}>Start new game</Button>
         </Box>
       )}
+      <h1>Funds: ${funds}</h1>
     </Wrapper>
   </>
   );
