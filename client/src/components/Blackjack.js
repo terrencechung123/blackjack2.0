@@ -49,7 +49,7 @@ function Blackjack({ user }) {
   useEffect(() => {
     const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
     console.log('storedGame', storedGame)
-    if (storedGame.user.id === user.id) {
+    if (storedGame.id == user.id) {
       setGame(storedGame);
       setGameStart(true);
     }
