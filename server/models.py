@@ -75,6 +75,3 @@ class Card(db.Model, SerializerMixin):
     users = association_proxy('games', 'user')
 
     _game_cards = db.relationship('Game', secondary='game_cards', back_populates='cards')
-
-
-
