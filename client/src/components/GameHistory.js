@@ -3,17 +3,14 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Box, Button } from "../styles";
 
-function GameHistory({user}) {
-  console.log('user',user)
+function GameHistory({ user }) {
   const [games, setGames] = useState([]);
-
 
   useEffect(() => {
     fetch("/games")
-    .then((r) => r.json())
-    .then(setGames);
+      .then((r) => r.json())
+      .then(setGames);
   }, []);
-
 
   function handleDeleteGame(id) {
     fetch(`/games/${id}`, {
@@ -21,12 +18,14 @@ function GameHistory({user}) {
     }).then((r) => {
       if (r.ok) {
         setGames((games) =>
-        games.filter((game) => game.id !== id)
+          games.filter((game) => game.id !== id)
         );
       }
     });
   }
+
   const filteredGames = games.filter((game) => game.user.id === user.id);
+  const gameNumber = filteredGames.length + 1;
 
   return (
     <Wrapper>
@@ -34,32 +33,32 @@ function GameHistory({user}) {
         Games
       </h1>
       {filteredGames.length > 0 ? (
-        filteredGames.map((game) => (
+        filteredGames.map((game, index) => (
           <Game key={game.id}>
             <Box>
-              <h2>{"Game " + game.id}</h2>
+              <h2>{"Game " + (index + 1)}</h2>
               <h3>{"User: " + game.user.username}</h3>
               <h3>
                 {
                   "Dealer Hand: " +
-                    (game.dealer_hand
-                      ? game.dealer_hand
-                          .replace(/[[\]]/g, "")
-                          .replace(/"/g, "")
-                          .replace(/,/g, ", ")
-                          .replace(/\bnull\b/g, "Hidden Card")
-                      : "Hidden Card")
+                  (game.dealer_hand
+                    ? game.dealer_hand
+                        .replace(/[[\]]/g, "")
+                        .replace(/"/g, "")
+                        .replace(/,/g, ", ")
+                        .replace(/\bnull\b/g, "Hidden Card")
+                    : "Hidden Card")
                 }
               </h3>
               <h3>
                 {
                   "User Hand: " +
-                    (game.user_hand
-                      ? game.user_hand
-                          .replace(/[[\]]/g, "")
-                          .replace(/"/g, "")
-                          .replace(/,/g, ", ")
-                      : "hidden card")
+                  (game.user_hand
+                    ? game.user_hand
+                        .replace(/[[\]]/g, "")
+                        .replace(/"/g, "")
+                        .replace(/,/g, ", ")
+                    : "hidden card")
                 }
               </h3>
               <h3>{"Result: " + game.result}</h3>
@@ -84,6 +83,7 @@ function GameHistory({user}) {
           </Button>
         </>
       )}
+      {/* <div>Current game number: {gameNumber}</div> */}
     </Wrapper>
   );
 }
@@ -97,9 +97,8 @@ const Wrapper = styled.section`
 const Game = styled.article`
   margin-bottom: 24px;
   margin-right: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 `;
-
 
 export default GameHistory;
 

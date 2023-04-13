@@ -48,16 +48,51 @@ function Blackjack({ user }) {
 
   useEffect(() => {
     const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
-    console.log('storedGame', storedGame)
-    if (storedGame.user.id === user.id) {
+    console.log('storedGame', storedGame);
+    if (storedGame.user.id == user.id) {
       setGame(storedGame);
       setGameStart(true);
+      console.log('storedGaemUserId', storedGame.user.id)
     }
-    else {
-      setGame([]);
-      setGameStart(false);
+    // else if (storedGame.user.id !== user.id) {
+    //   fetch('/games')
+    //     .then((r) => r.json())
+    //     .then((data) => {
+    //       const filteredGames = data.filter(
+    //         (game) => game.user.id === user.id && game.result === "In Progress"
+    //       );
+    //       if (filteredGames.length > 0) {
+    //         const firstGame = filteredGames[0];
+    //         // console.log('filteredGames', filteredGames)
+    //         setGame(firstGame);
+    //         setDealerHand(JSON.parse(firstGame.dealer_hand));
+    //         setUserHand(JSON.parse(firstGame.user_hand));
+    //         setGameResult(firstGame.result);
+    //         setIsGameOver(false);
+    //         setGameStart(true);
+          else {
+                  fetch('/games')
+        .then((r) => r.json())
+        .then((data) => {
+          const filteredGames = data.filter(
+            (game) => game.user.id === user.id && game.result === "In Progress"
+          );
+          if (filteredGames.length > 0) {
+            const firstGame = filteredGames[0];
+            console.log('firstGame', firstGame)
+            setGame(firstGame);
+            setDealerHand(JSON.parse(firstGame.dealer_hand));
+            setUserHand(JSON.parse(firstGame.user_hand));
+            setGameResult(firstGame.result);
+            setIsGameOver(false);
+            setGameStart(true);
+            setCards(firstGame.cards)
+            // setGameStart(false);
+          }
+        });
     }
   }, []);
+
   // Save the game state to localStorage whenever it changes
   useEffect(() => {
     if (game) {
@@ -119,7 +154,7 @@ function Blackjack({ user }) {
         dealer_hand: dealerHandNames,
         user_hand: userHandNames,
         result:'In Progress',
-        user_id:user.id
+        user_id:user.id,
       })
     });
     const data = await response.json();
