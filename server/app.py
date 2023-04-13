@@ -69,12 +69,12 @@ class Games(Resource):
     def post(self):
         data =request.get_json()
         game = Game(
-            dealer_hand = data['dealer_hand'],
-            # train - data["train"],
+            user_id = data["user_id"],
             user_hand = data['user_hand'],
-            #user = data["user"],
+            user_hand_images = data['user_hand_images'],
+            dealer_hand = data['dealer_hand'],
+            dealer_hand_images = data['dealer_hand_images'],
             result = data["result"],
-            user_id = data["user_id"]
         )
         db.session.add(game)
         db.session.commit()

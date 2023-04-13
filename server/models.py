@@ -42,7 +42,10 @@ class Game(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     result = db.Column(db.String)
     user_hand = db.Column(db.String)
+    user_hand_images = db.Column(db.String)
     dealer_hand = db.Column(db.String)
+    dealer_hand_images = db.Column(db.String)
+
 
     cards = db.relationship('Card', secondary='game_cards', back_populates='_game_cards')
 
