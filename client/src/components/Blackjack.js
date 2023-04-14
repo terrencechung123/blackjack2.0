@@ -286,6 +286,11 @@ function Blackjack({ user }) {
     setFunds(funds+100)
   }
 
+  async function takeFunds(){
+    if (funds >=100){
+    setFunds(funds-100)}
+  }
+
   return (
     <>
 
@@ -338,9 +343,11 @@ function Blackjack({ user }) {
               <Button onClick={betReset}>Reset Bet Amount</Button>
             </div>
             <div style={{ marginLeft: "40px" }}>
-              <Button onClick={addFunds}>Add $100 To Funds!</Button>
+              <Button onClick={addFunds}>Add $100 To Funds</Button>
             </div>
-
+            <div style={{marginLeft:"60px"}}>
+              <Button onClick={takeFunds}>Take $100 From Funds</Button>
+            </div>
           </div>
               </div>
             </div>
@@ -414,7 +421,10 @@ function Blackjack({ user }) {
               <Button onClick={betReset}>Reset Bet Amount</Button>
             </div>
             <div style={{ marginLeft: "40px" }}>
-              <Button onClick={addFunds}>Add $100 To Funds!</Button>
+              <Button onClick={addFunds}>Add $100 To Funds</Button>
+            </div>
+            <div style={{marginLeft:"60px"}}>
+              <Button onClick={takeFunds}>Take $100 From Funds</Button>
             </div>
 
           </div>
