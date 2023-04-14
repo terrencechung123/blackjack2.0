@@ -305,11 +305,13 @@ function Blackjack({ user }) {
             {isGameOver ? (
 
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                  <h1>{gameResult}</h1>
+                  <h1 style={{marginBottom:"40px", marginTop:"40px", fontSize:"36px"}}>{gameResult}</h1>
+                  <div style={{marginBottom:"50px"}}>
                   <Button onClick={() => {
                     startNewGame();
                     setGameStart(true);
                   }}>Deal Cards</Button>
+                  </div>
                   <div style={{display:"flex", justifyContent:"center"}}>
                     <div style={{ marginLeft: "40px" }}>
                       <Button onClick={bet20}>Bet $20</Button>
@@ -375,11 +377,13 @@ function Blackjack({ user }) {
             </Box>
       ) : (
         <Box style ={{marginTop:"50px"}}>
-          <Button onClick={() => {
-            startNewGame();
-            setGameStart(true);
-            }}>Deal Cards
-          </Button>
+          <div style={{display:"flex", justifyContent:"center", marginBottom:"50px"}}>
+            <Button onClick={() => {
+              startNewGame();
+              setGameStart(true);
+              }}>Deal Cards
+            </Button>
+          </div>
           <div style={{display:"flex", justifyContent:"center"}}>
             <div style={{ marginLeft: "40px" }}>
               <Button onClick={bet20}>Bet $20</Button>
