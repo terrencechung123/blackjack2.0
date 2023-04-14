@@ -22,6 +22,7 @@ function Blackjack({ user }) {
   const [games,setGames] = useState([])
   const [betAmount,setBetAmount] = useState(0)
   const [funds,setFunds] = useState(1000)
+  
   useEffect(() => {
     const gameState = JSON.parse(localStorage.getItem('blackjack-game'));
 
