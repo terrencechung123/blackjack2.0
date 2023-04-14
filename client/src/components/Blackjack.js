@@ -24,7 +24,10 @@ function Blackjack({ user }) {
   const [betAmount,setBetAmount] = useState(0)
   const [funds,setFunds] = useState(1000)
 
-//fetch game on user login, if game.user.id does not match user.id don't display game and return them to the start game page
+
+
+
+  //fetch game on user login, if game.user.id does not match user.id don't display game and return them to the start game page
   useEffect(() => {
     const gameState = JSON.parse(localStorage.getItem('blackjack-game'));
     if (gameState) {
@@ -49,7 +52,7 @@ function Blackjack({ user }) {
     }
   }, []);
 
-//loads game
+  //loads game
   useEffect(() => {
     const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
     if (storedGame.user.id == user.id) {
@@ -80,7 +83,7 @@ function Blackjack({ user }) {
     }
   }, [cards, dealerHand, userHand, gameResult, isGameOver, game, gameStart, betAmount, funds]);
 
-//fetch cards
+  //fetch cards
   useEffect(() => {
     fetch("/cards")
     .then((r) => r.json())
@@ -355,7 +358,6 @@ function Blackjack({ user }) {
   }
 
 
-  // console.log('userHand[0].value',userHand[0].value)
   return (
     <>
         <Wrapper>
@@ -401,10 +403,10 @@ function Blackjack({ user }) {
               <Button onClick={betReset}>Reset Bet Amount</Button>
             </div>
             <div style={{ marginLeft: "40px" }}>
-              <Button onClick={addFunds}>Add $100 To Funds</Button>
+              <Button onClick={addFunds}>Cash In $100</Button>
             </div>
             <div style={{marginLeft:"60px"}}>
-              <Button onClick={takeFunds}>Take $100 From Funds</Button>
+              <Button onClick={takeFunds}>Cash Out $100</Button>
             </div>
           </div>
               </div>
