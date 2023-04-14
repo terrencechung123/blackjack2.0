@@ -292,23 +292,9 @@ function Blackjack({ user }) {
         <Wrapper>
           {gameStart ? (
             <Box>
-            {/* <Button onClick={() => {
-            startNewGame();
-            setGameStart(true);
-          }}>Start new game</Button> */}
             <h3>Dealer: </h3>
             <p>
               {dealerHand.map((card, index) => (
-                <img
-                  key={index}
-                  src={card.image ? card.image : backCard}
-                  alt={`${card.value} of ${card.suit}`}
-                />
-              ))}
-            </p>
-            <h3>{user.username}: </h3>
-            <p>
-              {userHand.map((card, index) => (
                 <img
                   key={index}
                   src={card.image ? card.image : backCard}
@@ -375,6 +361,16 @@ function Blackjack({ user }) {
                 </div> */}
               </div>
             )}
+            <h3>{user.username}: </h3>
+            <p>
+              {userHand.map((card, index) => (
+                <img
+                  key={index}
+                  src={card.image ? card.image : backCard}
+                  alt={`${card.value} of ${card.suit}`}
+                />
+              ))}
+            </p>
 
             </Box>
       ) : (
@@ -406,9 +402,9 @@ function Blackjack({ user }) {
           </div>
         </Box>
       )}
-      <h1>Funds: ${funds}</h1>
-      <h1>Bet Amount: ${betAmount}</h1>
     </Wrapper>
+      <h1>Bet Amount: ${betAmount}</h1>
+      <h1>Funds: ${funds}</h1>
   </>
   );
 }
