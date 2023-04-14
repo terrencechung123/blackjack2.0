@@ -425,9 +425,9 @@ function Blackjack({ user }) {
                     <Button onClick={stand}>Stand</Button>
                   </div>
                   <div style={{ marginLeft: "40px" }}>
-                  {(userHand[0].value + userHand[1].value <= 11) ? 
+                  {(userHand[0].value + userHand[1].value <= 11) ?
                     <Button onClick={doubleDown}>Double Down</Button>
-                   : null}
+                  : null}
                   </div>
                 </div>
                 {/* <div style={{display:"flex", justifyContent:"center"}}>
