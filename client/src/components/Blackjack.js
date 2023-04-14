@@ -355,7 +355,7 @@ function Blackjack({ user }) {
             ) : (
               <div>
                 {/* <h1>Bet Amount: ${betAmount}</h1> */}
-                <div style={{ display: "flex", justifyContent: "center" }}>
+                <div style={{ display: "flex", justifyContent: "center", marginTop:"50px" }}>
                   <div style={{ marginRight: "20px" }}>
                     <Button onClick={hit}>Hit</Button>
                   </div>
