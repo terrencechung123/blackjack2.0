@@ -11,6 +11,9 @@ function shuffleArray(array) {
   }
   return array;
 }
+
+
+
 function Blackjack({ user }) {
   const [cards, setCards] = useState([]);
   const [dealerHand, setDealerHand] = useState([]);
@@ -23,14 +26,14 @@ function Blackjack({ user }) {
   const [betAmount,setBetAmount] = useState(0)
   const [funds,setFunds] = useState(1000)
 
+
+
   useEffect(() => {
     const gameState = JSON.parse(localStorage.getItem('blackjack-game'));
-
     if (gameState) {
       fetch(`/games/${gameState.game.id}`)
         .then(r => r.json())
         .then(data => {
-          console.log('gameState data', data);
           setGames(data);
           if (data.id === gameState.game.id) {
             setCards(gameState.cards);
@@ -46,10 +49,12 @@ function Blackjack({ user }) {
         });
     }
   }, []);
+
+
+
 //loads game
   useEffect(() => {
     const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
-    console.log('storedGame', storedGame)
     if (storedGame.user.id == user.id) {
       setGame(storedGame);
       setGameStart(true);
@@ -59,6 +64,8 @@ function Blackjack({ user }) {
       setGameStart(false);
     }
   }, []);
+
+
 
   // Save the game state to localStorage whenever it changes
   useEffect(() => {
@@ -87,14 +94,9 @@ function Blackjack({ user }) {
   }, []);
 
 
-  console.log("deck",cards)
-  console.log("dealerHand",dealerHand);
-  console.log("userHand",userHand);
-  console.log("gameStart",gameStart);
 
   async function startNewGame() {
     const deck = [...cards];
-
     // Remove the cards that have already been dealt in the current game
     [...dealerHand, ...userHand].forEach(card => {
       const index = deck.findIndex(c => c.code === card.code);
@@ -102,12 +104,10 @@ function Blackjack({ user }) {
         deck.splice(index, 1);
       }
     });
-
     const newDealerHand = [cards.pop(), '*'];
     const newUserHand = [cards.pop(), cards.pop()];
     const dealerHandNames = JSON.stringify(newDealerHand.map(card => card.name));
     const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
-
     setDealerHand(newDealerHand);
     setUserHand(newUserHand);
     console.log('newDealerHand', newDealerHand)
@@ -131,49 +131,6 @@ function Blackjack({ user }) {
     setIsGameOver(false);
   }
 
-  async function hit() {
-    const newUserHand = [...userHand];
-    newUserHand.push(cards.pop());
-
-    // Update the game state to reflect the new card being added to the user's hand
-    const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
-    const response = await fetch(`/games/${game.id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user_hand: userHandNames,
-        user_id: user.id
-      })
-    });
-    const data = await response.json();
-    setGame(data);
-    setUserHand(newUserHand);
-
-    if (calculateHandValue(newUserHand) > 21) {
-      const result = 'Bust!'
-      betResult(result);
-      setGameResult(result);
-      console.log('hitUser', user)
-      console.log('newUserHandHit', newUserHand)
-      setIsGameOver(true);
-      const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
-      const response = await fetch(`/games/${game.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          result: result,
-          user_hand: userHandNames,
-          user_id: user.id
-        })
-      });
-      const data = await response.json();
-      console.log(data);
-    }
-  }
 
 
   function calculateHandValue(cards) {
@@ -193,6 +150,123 @@ function Blackjack({ user }) {
           return sum;
         }
 
+
+  async function doubleDown(){
+    if(funds >= betAmount){
+      const newUserHand = [...userHand];
+      newUserHand.push(cards.pop());
+      const userHandValue = calculateHandValue(newUserHand);
+      let result;
+      if (userHandValue > 21) {
+        result = 'Bust!';
+        setFunds(funds-betAmount)
+        setBetAmount(0);
+        setGameResult(result);
+        // betResult(result);
+        setIsGameOver(true);
+        const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
+        const response = await fetch(`/games/${game.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            // dealer_hand: dealerHandNames,
+            result: result,
+            user_hand: userHandNames,
+            user_id: user.id
+          })
+        });
+      } else {
+      const newDealerHand = [...dealerHand];
+      newDealerHand[1] = cards.pop(); // reveal the dealer's hidden card
+      while (calculateHandValue(newDealerHand) < 17) {
+        newDealerHand.push(cards.pop()); // keep drawing cards until the dealer's hand value is at least 17
+      }
+      setDealerHand(newDealerHand);
+      setUserHand(newUserHand)
+      const dealerHandValue = calculateHandValue(newDealerHand);
+        if (dealerHandValue > 21) {
+        result = 'You Won!';
+        setFunds(funds+3*betAmount);
+        setBetAmount(0);
+      } else if (dealerHandValue > userHandValue) {
+        result = 'You Lost!';
+        setFunds(funds-betAmount);
+        setBetAmount(0);
+      } else if (userHandValue > dealerHandValue) {
+        result = 'You Won!';
+        setFunds(funds+3*betAmount)
+        setBetAmount(0)
+      } else {
+        result = 'Tie!';
+        setFunds(funds+betAmount)
+        setBetAmount(0)
+      }
+      setGameResult(result);
+      // betResult(result);
+      setIsGameOver(true);
+      const dealerHandNames = JSON.stringify(newDealerHand.map(card => card.name));
+      const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
+      const response = await fetch(`/games/${game.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          dealer_hand: dealerHandNames,
+          result: result,
+          user_hand: userHandNames,
+          user_id: user.id
+        })
+      });
+    }
+  } else {
+      console.log('insufficient funds')
+    }
+  }
+
+
+  async function hit() {
+    const newUserHand = [...userHand];
+    newUserHand.push(cards.pop());
+    // Update the game state to reflect the new card being added to the user's hand
+    const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
+    const response = await fetch(`/games/${game.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_hand: userHandNames,
+        user_id: user.id
+      })
+    });
+    const data = await response.json();
+    setGame(data);
+    setUserHand(newUserHand);
+    if (calculateHandValue(newUserHand) > 21) {
+      const result = 'Bust!'
+      betResult(result);
+      setGameResult(result);
+      setIsGameOver(true);
+      const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
+      const response = await fetch(`/games/${game.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          result: result,
+          user_hand: userHandNames,
+          user_id: user.id
+        })
+      });
+    }
+  }
+
+
+
   async function stand() {
     const newDealerHand = [...dealerHand];
     newDealerHand[1] = cards.pop(); // reveal the dealer's hidden card
@@ -204,7 +278,7 @@ function Blackjack({ user }) {
     const dealerHandValue = calculateHandValue(newDealerHand);
     let result;
     if (userHandValue > 21) {
-      result = 'You Lost!';
+      result = 'Bust!';
     } else if (dealerHandValue > 21) {
       result = 'You Won!';
     } else if (dealerHandValue > userHandValue) {
@@ -219,9 +293,6 @@ function Blackjack({ user }) {
     setIsGameOver(true);
     const dealerHandNames = JSON.stringify(newDealerHand.map(card => card.name));
     const userHandNames = JSON.stringify(userHand.map(card => card.name));
-    console.log('standDealerHand', dealerHandNames)
-    console.log('standUserHand', userHandNames)
-    console.log('game',game)
     const response = await fetch(`/games/${game.id}`, {
       method: 'PATCH',
       headers: {
@@ -234,9 +305,8 @@ function Blackjack({ user }) {
         user_id: user.id
       })
     });
-      const data = await response.json();
-      console.log(data);
-        }
+  }
+
 
   async function bet20(){
     if (funds >= 20){
@@ -269,17 +339,17 @@ function Blackjack({ user }) {
 
   async function betResult(result){
     if (result == 'You Lost!'){
-      setBetAmount(0)
+      setBetAmount(0);
     }
     else if (result == 'You Won!'){
-      setFunds(funds+(2*betAmount));
-      setBetAmount(0)
+      setFunds(funds+ 2*betAmount);
+      setBetAmount(0);
     }
     else if (result == 'Tie!'){
-      setFunds(funds+betAmount)
-      setBetAmount(0)
-    } else{
-      setBetAmount(0)
+      setFunds(funds+betAmount);
+      setBetAmount(0);
+    } else {
+      setBetAmount(0);
     }
   }
 
@@ -292,9 +362,9 @@ function Blackjack({ user }) {
     setFunds(funds-100)}
   }
 
+
   return (
     <>
-
         <Wrapper>
           {gameStart ? (
             <Box>
@@ -311,7 +381,6 @@ function Blackjack({ user }) {
             {isGameOver ? (
             <div>
             <h3>{isNaN(calculateHandValue(dealerHand)) ? '' : 'Hand Value: '+calculateHandValue(dealerHand)}</h3>
-
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <h1 style={{marginBottom:"40px", marginTop:"40px", fontSize:"36px"}}>{gameResult} Play Again?</h1>
                 <div style={{marginBottom:"50px"}}>
@@ -362,6 +431,9 @@ function Blackjack({ user }) {
                   </div>
                   <div style={{ marginLeft: "20px" }}>
                     <Button onClick={stand}>Stand</Button>
+                  </div>
+                  <div style={{ marginLeft: "40px" }}>
+                    <Button onClick={doubleDown}>Double Down</Button>
                   </div>
                 </div>
                 {/* <div style={{display:"flex", justifyContent:"center"}}>
@@ -428,7 +500,6 @@ function Blackjack({ user }) {
             <div style={{marginLeft:"60px"}}>
               <Button onClick={takeFunds}>Take $100 From Funds</Button>
             </div>
-
           </div>
         </Box>
       )}
