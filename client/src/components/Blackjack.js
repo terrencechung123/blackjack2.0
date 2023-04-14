@@ -146,7 +146,6 @@ function Blackjack({ user }) {
 
 
   async function doubleDown(){
-    if(funds >= betAmount){
       const newUserHand = [...userHand];
       newUserHand.push(cards.pop());
       const userHandValue = calculateHandValue(newUserHand);
@@ -214,9 +213,6 @@ function Blackjack({ user }) {
           user_id: user.id
         })
       });
-    }
-  } else {
-      console.log('insufficient funds')//set up error handling
     }
   }
 
