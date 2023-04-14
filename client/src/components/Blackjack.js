@@ -50,17 +50,17 @@ function Blackjack({ user }) {
   }, []);
 
 //loads game
-  // useEffect(() => {
-  //   const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
-  //   if (storedGame.user.id === user.id) {
-  //     setGame(storedGame);
-  //     setGameStart(true);
-  //   }
-  //   else {
-  //     setGame([]);
-  //     setGameStart(false);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
+    if (storedGame.user.id == user.id) {
+      setGame(storedGame);
+      setGameStart(true);
+    }
+    else {
+      setGame([]);
+      setGameStart(false);
+    }
+  }, []);
 
   // Save the game state to localStorage whenever it changes
   useEffect(() => {
@@ -355,6 +355,7 @@ function Blackjack({ user }) {
   }
 
 
+  // console.log('userHand[0].value',userHand[0].value)
   return (
     <>
         <Wrapper>
@@ -394,12 +395,6 @@ function Blackjack({ user }) {
                   <div style={{ marginLeft: "80px" }}>
                     <Button onClick={betAllIn}>All In</Button>
                   </div>
-                  {/* <div style={{ marginLeft: "40px" }}>
-                    <Button onClick={betReset}>Reset Bet Amount</Button>
-                  </div>
-                  <div style={{ marginLeft: "40px" }}>
-                    <Button onClick={addFunds}>Add $100 To Funds</Button>
-                  </div> */}
                 </div>
                 <div style={{display:"flex", justifyContent:"center", marginBottom:"50px", marginTop:"20px"}}>
             <div style={{ marginRight: "40px" }}>
@@ -416,7 +411,6 @@ function Blackjack({ user }) {
             </div>
             ) : (
               <div>
-                {/* <h1>Bet Amount: ${betAmount}</h1> */}
                 <div style={{ display: "flex", justifyContent: "center", marginTop:"50px" }}>
                   <div style={{ marginRight: "20px" }}>
                     <Button onClick={hit}>Hit</Button>
@@ -425,28 +419,11 @@ function Blackjack({ user }) {
                     <Button onClick={stand}>Stand</Button>
                   </div>
                   <div style={{ marginLeft: "40px" }}>
-                  {(userHand[0].value + userHand[1].value <= 11) ?
+                  {(calculateHandValue(userHand) <= 11) ?
                     <Button onClick={doubleDown}>Double Down</Button>
                   : null}
                   </div>
                 </div>
-                {/* <div style={{display:"flex", justifyContent:"center"}}>
-                  <div style={{ marginLeft: "40px" }}>
-                    <Button onClick={bet20}>Bet $20</Button>
-                  </div>
-                  <div style={{ marginLeft: "40px" }}>
-                    <Button onClick={bet50}>Bet $50</Button>
-                  </div>
-                  <div style={{ marginLeft: "40px" }}>
-                    <Button onClick={bet100}>Bet $100</Button>
-                  </div>
-                  <div style={{ marginLeft: "40px" }}>
-                    <Button onClick={betAllIn}>All In!</Button>
-                  </div>
-                  <div style={{ marginLeft: "40px" }}>
-                    <Button onClick={betReset}>Reset Bet Amount</Button>
-                  </div>
-                </div> */}
               </div>
             )}
             <h1>{user.username}: </h1>
