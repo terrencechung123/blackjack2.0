@@ -22,7 +22,7 @@ function Blackjack({ user }) {
   const [games,setGames] = useState([])
   const [betAmount,setBetAmount] = useState(0)
   const [funds,setFunds] = useState(1000)
-  
+
   useEffect(() => {
     const gameState = JSON.parse(localStorage.getItem('blackjack-game'));
 
@@ -432,8 +432,8 @@ function Blackjack({ user }) {
         </Box>
       )}
     </Wrapper>
-      <h1 style={{marginTop:"60px"}}>Bet Amount: ${betAmount}</h1>
-      <h1>Funds: ${funds}</h1>
+      <h1 style={{marginTop:"60px",color:"white"}}>Bet Amount: ${betAmount}</h1>
+      <h1 style={{color:"white"}}>Funds: ${funds}</h1>
   </>
   );
 }
