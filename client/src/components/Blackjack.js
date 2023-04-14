@@ -362,6 +362,9 @@ function Blackjack({ user }) {
                   <div style={{ marginLeft: "20px" }}>
                     <Button onClick={stand}>Stand</Button>
                   </div>
+                  <div style={{ marginLeft: "45px" }}>
+              <Button onClick={betAllIn}>All In</Button>
+            </div>
                 </div>
                 {/* <div style={{display:"flex", justifyContent:"center"}}>
                   <div style={{ marginLeft: "40px" }}>
