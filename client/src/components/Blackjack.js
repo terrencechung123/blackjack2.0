@@ -407,7 +407,7 @@ function Blackjack({ user }) {
         </Box>
       )}
     </Wrapper>
-      <h1>Bet Amount: ${betAmount}</h1>
+      <h1 style={{marginTop:"60px"}}>Bet Amount: ${betAmount}</h1>
       <h1>Funds: ${funds}</h1>
   </>
   );
