@@ -50,17 +50,17 @@ function Blackjack({ user }) {
   }, []);
 
 //loads game
-  useEffect(() => {
-    const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
-    if (storedGame.user.id == user.id) {
-      setGame(storedGame);
-      setGameStart(true);
-    }
-    else {
-      setGame([]);
-      setGameStart(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
+  //   if (storedGame.user.id === user.id) {
+  //     setGame(storedGame);
+  //     setGameStart(true);
+  //   }
+  //   else {
+  //     setGame([]);
+  //     setGameStart(false);
+  //   }
+  // }, []);
 
   // Save the game state to localStorage whenever it changes
   useEffect(() => {
@@ -425,7 +425,9 @@ function Blackjack({ user }) {
                     <Button onClick={stand}>Stand</Button>
                   </div>
                   <div style={{ marginLeft: "40px" }}>
+                  {(userHand[0].value + userHand[1].value <= 11) ? 
                     <Button onClick={doubleDown}>Double Down</Button>
+                   : null}
                   </div>
                 </div>
                 {/* <div style={{display:"flex", justifyContent:"center"}}>
