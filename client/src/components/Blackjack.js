@@ -149,7 +149,7 @@ function Blackjack({ user }) {
     const data = await response.json();
     setGame(data);
     setUserHand(newUserHand);
-    
+
     if (calculateHandValue(newUserHand) > 21) {
       const result = 'Bust!'
       betResult(result);
@@ -292,7 +292,7 @@ function Blackjack({ user }) {
         <Wrapper>
           {gameStart ? (
             <Box>
-            <h3>Dealer: </h3>
+            <h1>Dealer: </h1>
             <p>
               {dealerHand.map((card, index) => (
                 <img
@@ -303,36 +303,38 @@ function Blackjack({ user }) {
               ))}
             </p>
             {isGameOver ? (
-
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                  <h1 style={{marginBottom:"40px", marginTop:"40px", fontSize:"36px"}}>{gameResult}</h1>
-                  <div style={{marginBottom:"50px"}}>
-                  <Button onClick={() => {
-                    startNewGame();
-                    setGameStart(true);
-                  }}>Deal Cards</Button>
+            <div>
+              <h3>Hand Value: {dealerHand.reduce((sum, card) => sum + card.value, 0)}</h3>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <h1 style={{marginBottom:"40px", marginTop:"40px", fontSize:"36px"}}>{gameResult}</h1>
+                <div style={{marginBottom:"50px"}}>
+                <Button onClick={() => {
+                  startNewGame();
+                  setGameStart(true);
+                }}>Deal Cards</Button>
+                </div>
+                <div style={{display:"flex", justifyContent:"center"}}>
+                  <div style={{ marginLeft: "40px" }}>
+                    <Button onClick={bet20}>Bet $20</Button>
                   </div>
-                  <div style={{display:"flex", justifyContent:"center"}}>
-                    <div style={{ marginLeft: "40px" }}>
-                      <Button onClick={bet20}>Bet $20</Button>
-                    </div>
-                    <div style={{ marginLeft: "40px" }}>
-                      <Button onClick={bet50}>Bet $50</Button>
-                    </div>
-                    <div style={{ marginLeft: "40px" }}>
-                      <Button onClick={bet100}>Bet $100</Button>
-                    </div>
-                    <div style={{ marginLeft: "40px" }}>
-                      <Button onClick={betAllIn}>All In</Button>
-                    </div>
-                    <div style={{ marginLeft: "40px" }}>
-                      <Button onClick={betReset}>Reset Bet Amount</Button>
-                    </div>
-                    <div style={{ marginLeft: "40px" }}>
-                      <Button onClick={addFunds}>Add $100 To Funds</Button>
-                    </div>
+                  <div style={{ marginLeft: "40px" }}>
+                    <Button onClick={bet50}>Bet $50</Button>
+                  </div>
+                  <div style={{ marginLeft: "40px" }}>
+                    <Button onClick={bet100}>Bet $100</Button>
+                  </div>
+                  <div style={{ marginLeft: "40px" }}>
+                    <Button onClick={betAllIn}>All In</Button>
+                  </div>
+                  <div style={{ marginLeft: "40px" }}>
+                    <Button onClick={betReset}>Reset Bet Amount</Button>
+                  </div>
+                  <div style={{ marginLeft: "40px" }}>
+                    <Button onClick={addFunds}>Add $100 To Funds</Button>
                   </div>
                 </div>
+              </div>
+            </div>
             ) : (
               <div>
                 {/* <h1>Bet Amount: ${betAmount}</h1> */}
@@ -363,7 +365,7 @@ function Blackjack({ user }) {
                 </div> */}
               </div>
             )}
-            <h3>{user.username}: </h3>
+            <h1>{user.username}: </h1>
             <p>
               {userHand.map((card, index) => (
                 <img
@@ -373,7 +375,7 @@ function Blackjack({ user }) {
                 />
               ))}
             </p>
-
+            <h3>Hand Value: {userHand.reduce((sum, card) => sum + card.value, 0)}</h3>
             </Box>
       ) : (
         <Box style ={{marginTop:"50px"}}>
