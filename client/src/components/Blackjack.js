@@ -312,7 +312,7 @@ function Blackjack({ user }) {
             <div>
               <h3>Hand Value: {dealerHand.reduce((sum, card) => sum + card.value, 0)}</h3>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <h1 style={{marginBottom:"40px", marginTop:"40px", fontSize:"36px"}}>{gameResult}</h1>
+                <h1 style={{marginBottom:"40px", marginTop:"40px", fontSize:"36px"}}>{gameResult} Play Again?</h1>
                 <div style={{marginBottom:"50px"}}>
                 <Button onClick={() => {
                   startNewGame();
