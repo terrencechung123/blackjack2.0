@@ -45,7 +45,7 @@ function Blackjack({ user }) {
         });
     }
   }, []);
-
+//loads game
   useEffect(() => {
     const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
     console.log('storedGame', storedGame)
@@ -58,6 +58,7 @@ function Blackjack({ user }) {
       setGameStart(false);
     }
   }, []);
+
   // Save the game state to localStorage whenever it changes
   useEffect(() => {
     if (game) {
@@ -148,9 +149,10 @@ function Blackjack({ user }) {
     const data = await response.json();
     setGame(data);
     setUserHand(newUserHand);
-
+    
     if (calculateHandValue(newUserHand) > 21) {
       const result = 'Bust!'
+      betResult(result);
       setGameResult(result);
       console.log('hitUser', user)
       console.log('newUserHandHit', newUserHand)
@@ -201,17 +203,18 @@ function Blackjack({ user }) {
     const dealerHandValue = calculateHandValue(newDealerHand);
     let result;
     if (userHandValue > 21) {
-      result = 'You Lost.';
+      result = 'You Lost!';
     } else if (dealerHandValue > 21) {
       result = 'You Won!';
     } else if (dealerHandValue > userHandValue) {
-      result = 'You Lost.';
+      result = 'You Lost!';
     } else if (userHandValue > dealerHandValue) {
       result = 'You Won!';
     } else {
       result = 'Tie!';
     }
     setGameResult(result);
+    betResult(result);
     setIsGameOver(true);
     const dealerHandNames = JSON.stringify(newDealerHand.map(card => card.name));
     const userHandNames = JSON.stringify(userHand.map(card => card.name));
@@ -233,9 +236,56 @@ function Blackjack({ user }) {
       const data = await response.json();
       console.log(data);
         }
-  async function bet(){
-    return console.log('hello')
+
+  async function bet20(){
+    if (funds >= 20){
+    setBetAmount(betAmount+20)
+    setFunds(funds-20)
+    }
   }
+
+  async function bet50(){
+    if (funds >=50){
+    setBetAmount(betAmount+50)
+    setFunds(funds-50)}
+  }
+
+  async function bet100(){
+    if (funds >=100){
+    setBetAmount(betAmount+100)
+    setFunds(funds-100)}
+  }
+
+  async function betAllIn(){
+    setBetAmount(betAmount+funds)
+    setFunds(0)
+  }
+
+  async function betReset(){
+    setFunds(funds+betAmount)
+    setBetAmount(0)
+  }
+
+  async function betResult(result){
+    if (result == 'You Lost!'){
+      setBetAmount(0)
+    }
+    else if (result == 'You Won!'){
+      setFunds(funds+(2*betAmount));
+      setBetAmount(0)
+    }
+    else if (result == 'Tie!'){
+      setFunds(funds+betAmount)
+      setBetAmount(0)
+    } else{
+      setBetAmount(0)
+    }
+  }
+
+  async function addFunds(){
+    setFunds(funds+100)
+  }
+
   return (
     <>
 
@@ -267,29 +317,64 @@ function Blackjack({ user }) {
               ))}
             </p>
             {isGameOver ? (
-  <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-    <h1>{gameResult}</h1>
-    <Button onClick={() => {
-      startNewGame();
-      setGameStart(true);
-    }}>Start new game</Button>
-  </div>
-) : (
-  <div>
-  <h1>Bet Amount: ${betAmount}</h1>
-  <div style={{ display: "flex", justifyContent: "center" }}>
-    <div style={{ marginRight: "20px" }}>
-      <Button onClick={hit}>Hit</Button>
-    </div>
-    <div style={{ marginLeft: "20px" }}>
-      <Button onClick={stand}>Stand</Button>
-    </div>
-    <div style={{ marginLeft: "40px" }}>
-      <Button onClick={bet}>Bet</Button>
-    </div>
-  </div>
-  </div>
-)}
+
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                  <h1>{gameResult}</h1>
+                  <Button onClick={() => {
+                    startNewGame();
+                    setGameStart(true);
+                  }}>Start new game</Button>
+                  <div style={{display:"flex", justifyContent:"center"}}>
+                    <div style={{ marginLeft: "40px" }}>
+                      <Button onClick={bet20}>Bet $20</Button>
+                    </div>
+                    <div style={{ marginLeft: "40px" }}>
+                      <Button onClick={bet50}>Bet $50</Button>
+                    </div>
+                    <div style={{ marginLeft: "40px" }}>
+                      <Button onClick={bet100}>Bet $100</Button>
+                    </div>
+                    <div style={{ marginLeft: "40px" }}>
+                      <Button onClick={betAllIn}>All In</Button>
+                    </div>
+                    <div style={{ marginLeft: "40px" }}>
+                      <Button onClick={betReset}>Reset Bet Amount</Button>
+                    </div>
+                    <div style={{ marginLeft: "40px" }}>
+                      <Button onClick={addFunds}>Add $100 To Funds</Button>
+                    </div>
+                  </div>
+                </div>
+            ) : (
+              <div>
+                {/* <h1>Bet Amount: ${betAmount}</h1> */}
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ marginRight: "20px" }}>
+                    <Button onClick={hit}>Hit</Button>
+                  </div>
+                  <div style={{ marginLeft: "20px" }}>
+                    <Button onClick={stand}>Stand</Button>
+                  </div>
+                </div>
+                {/* <div style={{display:"flex", justifyContent:"center"}}>
+                  <div style={{ marginLeft: "40px" }}>
+                    <Button onClick={bet20}>Bet $20</Button>
+                  </div>
+                  <div style={{ marginLeft: "40px" }}>
+                    <Button onClick={bet50}>Bet $50</Button>
+                  </div>
+                  <div style={{ marginLeft: "40px" }}>
+                    <Button onClick={bet100}>Bet $100</Button>
+                  </div>
+                  <div style={{ marginLeft: "40px" }}>
+                    <Button onClick={betAllIn}>All In!</Button>
+                  </div>
+                  <div style={{ marginLeft: "40px" }}>
+                    <Button onClick={betReset}>Reset Bet Amount</Button>
+                  </div>
+                </div> */}
+              </div>
+            )}
 
             </Box>
       ) : (
@@ -297,10 +382,32 @@ function Blackjack({ user }) {
           <Button onClick={() => {
             startNewGame();
             setGameStart(true);
-          }}>Start new game</Button>
+            }}>Start new game
+          </Button>
+          <div style={{display:"flex", justifyContent:"center"}}>
+            <div style={{ marginLeft: "40px" }}>
+              <Button onClick={bet20}>Bet $20</Button>
+            </div>
+            <div style={{ marginLeft: "40px" }}>
+              <Button onClick={bet50}>Bet $50</Button>
+            </div>
+            <div style={{ marginLeft: "40px" }}>
+              <Button onClick={bet100}>Bet $100</Button>
+            </div>
+            <div style={{ marginLeft: "40px" }}>
+              <Button onClick={betAllIn}>All In!</Button>
+            </div>
+            <div style={{ marginLeft: "40px" }}>
+              <Button onClick={betReset}>Reset Bet Amount</Button>
+            </div>
+            <div style={{ marginLeft: "40px" }}>
+              <Button onClick={addFunds}>Add $100 To Funds!</Button>
+            </div>
+          </div>
         </Box>
       )}
       <h1>Funds: ${funds}</h1>
+      <h1>Bet Amount: ${betAmount}</h1>
     </Wrapper>
   </>
   );
