@@ -323,7 +323,7 @@ function Blackjack({ user }) {
                   <Button onClick={() => {
                     startNewGame();
                     setGameStart(true);
-                  }}>Start new game</Button>
+                  }}>Deal Cards</Button>
                   <div style={{display:"flex", justifyContent:"center"}}>
                     <div style={{ marginLeft: "40px" }}>
                       <Button onClick={bet20}>Bet $20</Button>
@@ -382,7 +382,7 @@ function Blackjack({ user }) {
           <Button onClick={() => {
             startNewGame();
             setGameStart(true);
-            }}>Start new game
+            }}>Deal Cards
           </Button>
           <div style={{display:"flex", justifyContent:"center"}}>
             <div style={{ marginLeft: "40px" }}>
