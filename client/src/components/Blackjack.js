@@ -314,25 +314,34 @@ function Blackjack({ user }) {
                 }}>Deal Cards</Button>
                 </div>
                 <div style={{display:"flex", justifyContent:"center"}}>
-                  <div style={{ marginLeft: "40px" }}>
+                  <div style={{ marginRight: "40px" }}>
                     <Button onClick={bet20}>Bet $20</Button>
                   </div>
-                  <div style={{ marginLeft: "40px" }}>
+                  <div style={{ marginLeft: "20px" }}>
                     <Button onClick={bet50}>Bet $50</Button>
                   </div>
-                  <div style={{ marginLeft: "40px" }}>
+                  <div style={{ marginLeft: "60px" }}>
                     <Button onClick={bet100}>Bet $100</Button>
                   </div>
-                  <div style={{ marginLeft: "40px" }}>
+                  <div style={{ marginLeft: "80px" }}>
                     <Button onClick={betAllIn}>All In</Button>
                   </div>
-                  <div style={{ marginLeft: "40px" }}>
+                  {/* <div style={{ marginLeft: "40px" }}>
                     <Button onClick={betReset}>Reset Bet Amount</Button>
                   </div>
                   <div style={{ marginLeft: "40px" }}>
                     <Button onClick={addFunds}>Add $100 To Funds</Button>
-                  </div>
+                  </div> */}
                 </div>
+                <div style={{display:"flex", justifyContent:"center", marginBottom:"50px", marginTop:"20px"}}>
+            <div style={{ marginRight: "40px" }}>
+              <Button onClick={betReset}>Reset Bet Amount</Button>
+            </div>
+            <div style={{ marginLeft: "40px" }}>
+              <Button onClick={addFunds}>Add $100 To Funds!</Button>
+            </div>
+
+          </div>
               </div>
             </div>
             ) : (
@@ -387,24 +396,27 @@ function Blackjack({ user }) {
             </Button>
           </div>
           <div style={{display:"flex", justifyContent:"center"}}>
-            <div style={{ marginLeft: "40px" }}>
+            <div style={{ marginRight: "40px" }}>
               <Button onClick={bet20}>Bet $20</Button>
             </div>
-            <div style={{ marginLeft: "40px" }}>
+            <div style={{ marginLeft: "20px" }}>
               <Button onClick={bet50}>Bet $50</Button>
             </div>
-            <div style={{ marginLeft: "40px" }}>
+            <div style={{ marginLeft: "60px" }}>
               <Button onClick={bet100}>Bet $100</Button>
             </div>
-            <div style={{ marginLeft: "40px" }}>
-              <Button onClick={betAllIn}>All In!</Button>
+            <div style={{ marginLeft: "80px" }}>
+              <Button onClick={betAllIn}>All In</Button>
             </div>
+          </div>
+          <div style={{display:"flex", justifyContent:"center", marginBottom:"50px", marginTop:"20px"}}>
             <div style={{ marginLeft: "40px" }}>
               <Button onClick={betReset}>Reset Bet Amount</Button>
             </div>
             <div style={{ marginLeft: "40px" }}>
               <Button onClick={addFunds}>Add $100 To Funds!</Button>
             </div>
+
           </div>
         </Box>
       )}
