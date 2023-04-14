@@ -440,6 +440,7 @@ function Blackjack({ user }) {
 
 const Wrapper = styled.section`
   max-width: 100%;
+  /* height:100vh; */
   margin: 40px auto;
   transform: translate(0, 4.5%);
   `;

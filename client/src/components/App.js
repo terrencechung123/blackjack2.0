@@ -55,8 +55,8 @@ const MainContainer = styled.main`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
-  height: 100vw;
-  width: 100vw;
+  /* height: 100vw;
+  width: 100vw; */
 `;
 
 
