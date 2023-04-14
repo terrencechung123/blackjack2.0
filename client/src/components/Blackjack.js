@@ -310,7 +310,8 @@ function Blackjack({ user }) {
             </p>
             {isGameOver ? (
             <div>
-              <h3>Hand Value: {dealerHand.reduce((sum, card) => sum + card.value, 0)}</h3>
+            <h3>{isNaN(calculateHandValue(dealerHand)) ? '' : 'Hand Value: '+calculateHandValue(dealerHand)}</h3>
+
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <h1 style={{marginBottom:"40px", marginTop:"40px", fontSize:"36px"}}>{gameResult} Play Again?</h1>
                 <div style={{marginBottom:"50px"}}>
@@ -392,7 +393,7 @@ function Blackjack({ user }) {
                 />
               ))}
             </p>
-            <h3>Hand Value: {userHand.reduce((sum, card) => sum + card.value, 0)}</h3>
+            <h3>Hand Value: {calculateHandValue(userHand)}</h3>
             </Box>
       ) : (
         <Box style ={{marginTop:"50px"}}>
