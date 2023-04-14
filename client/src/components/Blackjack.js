@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
 import { Box, Button } from "../styles";
-
 const backCard = 'https://deckofcardsapi.com/static/img/back.png'
 
 function shuffleArray(array) {
@@ -11,7 +10,6 @@ function shuffleArray(array) {
   }
   return array;
 }
-
 
 
 function Blackjack({ user }) {
@@ -26,8 +24,7 @@ function Blackjack({ user }) {
   const [betAmount,setBetAmount] = useState(0)
   const [funds,setFunds] = useState(1000)
 
-
-
+//fetch game on user login, if game.user.id does not match user.id don't display game and return them to the start game page
   useEffect(() => {
     const gameState = JSON.parse(localStorage.getItem('blackjack-game'));
     if (gameState) {
@@ -42,6 +39,8 @@ function Blackjack({ user }) {
             setGameResult(gameState.gameResult);
             setIsGameOver(gameState.isGameOver);
             setGame(gameState.game);
+            setBetAmount(gameState.betAmount);
+            setFunds(gameState.funds)
           } else {
             setGameStart(false);
             setIsGameOver(true);
@@ -49,8 +48,6 @@ function Blackjack({ user }) {
         });
     }
   }, []);
-
-
 
 //loads game
   useEffect(() => {
@@ -65,8 +62,6 @@ function Blackjack({ user }) {
     }
   }, []);
 
-
-
   // Save the game state to localStorage whenever it changes
   useEffect(() => {
     if (game) {
@@ -78,13 +73,14 @@ function Blackjack({ user }) {
         gameResult,
         game,
         isGameOver,
+        betAmount,
+        funds
       };
       localStorage.setItem('blackjack-game', JSON.stringify(gameState));
     }
-  }, [cards, dealerHand, userHand, gameResult, isGameOver, game, gameStart]);
+  }, [cards, dealerHand, userHand, gameResult, isGameOver, game, gameStart, betAmount, funds]);
 
-
-
+//fetch cards
   useEffect(() => {
     fetch("/cards")
     .then((r) => r.json())
@@ -92,7 +88,6 @@ function Blackjack({ user }) {
       setCards(shuffleArray(data));
     });
   }, []);
-
 
 
   async function startNewGame() {
@@ -110,8 +105,6 @@ function Blackjack({ user }) {
     const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
     setDealerHand(newDealerHand);
     setUserHand(newUserHand);
-    console.log('newDealerHand', newDealerHand)
-    console.log('newUserHand', newUserHand)
     const response = await fetch('/games', {
       method: 'POST',
       headers: {
@@ -124,13 +117,11 @@ function Blackjack({ user }) {
         user_id:user.id
       })
     });
-    const data = await response.json();
-    console.log('startingData',data); // This will log the newly created game object
+    const data = await response.json();// This will log the newly created game object
     setGame(data);
     setGameStart(true);
     setIsGameOver(false);
   }
-
 
 
   function calculateHandValue(cards) {
@@ -222,7 +213,7 @@ function Blackjack({ user }) {
       });
     }
   } else {
-      console.log('insufficient funds')
+      console.log('insufficient funds')//set up error handling
     }
   }
 
@@ -266,7 +257,6 @@ function Blackjack({ user }) {
   }
 
 
-
   async function stand() {
     const newDealerHand = [...dealerHand];
     newDealerHand[1] = cards.pop(); // reveal the dealer's hidden card
@@ -308,6 +298,24 @@ function Blackjack({ user }) {
   }
 
 
+  async function betResult(result){
+    if (result == 'You Lost!'){
+      setBetAmount(0);
+    }
+    else if (result == 'You Won!'){
+      setFunds(funds+ 2*betAmount);
+      setBetAmount(0);
+    }
+    else if (result == 'Tie!'){
+      setFunds(funds+betAmount);
+      setBetAmount(0);
+    } else {
+      setBetAmount(0);
+    }
+  }
+
+
+//betting buttons
   async function bet20(){
     if (funds >= 20){
     setBetAmount(betAmount+20)
@@ -335,22 +343,6 @@ function Blackjack({ user }) {
   async function betReset(){
     setFunds(funds+betAmount)
     setBetAmount(0)
-  }
-
-  async function betResult(result){
-    if (result == 'You Lost!'){
-      setBetAmount(0);
-    }
-    else if (result == 'You Won!'){
-      setFunds(funds+ 2*betAmount);
-      setBetAmount(0);
-    }
-    else if (result == 'Tie!'){
-      setFunds(funds+betAmount);
-      setBetAmount(0);
-    } else {
-      setBetAmount(0);
-    }
   }
 
   async function addFunds(){
@@ -510,11 +502,13 @@ function Blackjack({ user }) {
   );
 }
 
+
 const Wrapper = styled.section`
   max-width: 100%;
   /* height:100vh; */
   margin: 40px auto;
   transform: translate(0, 4.5%);
   `;
+
 
 export default Blackjack;
