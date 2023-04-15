@@ -375,10 +375,10 @@ function Blackjack({ user }) {
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <h1 style={{marginBottom:"40px", marginTop:"40px", fontSize:"36px"}}>{gameResult} Play Again?</h1>
                 <div style={{marginBottom:"50px"}}>
-                <Button onClick={() => {
+                <button id="arcade-button" onClick={() => {
                   startNewGame();
                   setGameStart(true);
-                }}>Deal Cards</Button>
+                }}>Deal Cards</button>
                 </div>
                 <div style={{display:"flex", justifyContent:"center"}}>
                   <div style={{ marginRight: "40px" }}>
@@ -439,11 +439,11 @@ function Blackjack({ user }) {
       ) : (
         <Box style ={{marginTop:"50px"}}>
           <div style={{display:"flex", justifyContent:"center", marginBottom:"50px"}}>
-            <Button onClick={() => {
+            <button id="arcade-button" onClick={() => {
               startNewGame();
               setGameStart(true);
               }}>Deal Cards
-            </Button>
+            </button>
           </div>
           <div style={{display:"flex", justifyContent:"center"}}>
             <div style={{ marginRight: "40px" }}>
