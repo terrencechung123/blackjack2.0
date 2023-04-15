@@ -6,6 +6,7 @@ import Blackjack from "./Blackjack";
 import styled from "styled-components";
 import Profile from "./Profile";
 import GameHistory from "./GameHistory";
+import NewLogIn from "./NewLogIn"
 
 function App() {
   const [user, setUser] = useState(null);
@@ -40,6 +41,9 @@ function App() {
           </Route>
           <Route path="/blackjack">
             <Blackjack user={user}/>
+          </Route>
+          <Route path="/newLogin">
+            <NewLogIn/>
           </Route>
         </Switch>
       </MainContainer>

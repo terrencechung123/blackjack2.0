@@ -2,6 +2,33 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import styled from "styled-components";
+
+function Copyright(props){
+    return(
+        <Typography variant="body2" color ="text.secondary" align="center" {...props}>
+            {'Copyright © '}
+            <Link color="inherit" href="https://mui.com/">
+                FlatJack
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    )
+}
 
 function Login({ setUser }) {
 
@@ -43,23 +70,95 @@ function Login({ setUser }) {
             })
         }
     })
-
+    const theme = createTheme();
     return (
-        <div className='login-div'>
-            <h1>{signup?'Create An Account':'Login'}</h1>
+        <ThemeProvider theme={theme}>
+            <Logo>
+                FlatJack
+            </Logo>
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+            sx={{
+                marginTop: 8,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+            }}
+            >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                <LockOutlinedIcon />
+            </Avatar>
+
+            <Typography component="h1" variant="h5">
+                {signup?'Create An Account':'Sign in'}
+            </Typography>
+        {/* <div className='login-div'> */}
             <h2 style={{color:'red'}}> {formik.errors.username}</h2>
             {error&& <h2 style={{color:'red'}}> {error}</h2>}
-            <form onSubmit={formik.handleSubmit}>
-                <label >Username</label>
-                <input type="text"  name="username" value={formik.values.username} onChange={formik.handleChange} />
-                <label >Password</label>
-                <input type="password"  name="password" value={formik.values.password} onChange={formik.handleChange} />
-                <input type='submit' value={signup?'Create Account':'Log In'} />
-            </form>
-            <button onClick={handleClick}>{signup?'Already have an account? Log in':'Don\'t have an account? Sign up'}</button>
-
-        </div>
+            <Box component="form" onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
+                {/* <label >Username</label> */}
+                <TextField
+                    margin="normal"
+                    type="text"
+                    required
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    name="username"
+                    autoComplete="username"
+                    value={formik.values.username}
+                    onChange={formik.handleChange} />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    value={formik.values.password}
+                    onChange={formik.handleChange} />
+                <Button
+                    type='submit'
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    value={signup?'Create Account':'Log In'}
+                    >
+                    Sign In
+                </Button>
+                <Grid container>
+                    <Grid item xs>
+                        <Link href="#" variant="body2" onClick={handleClick}>
+                            {signup?"Don't have an account? Sign Up": "Already have an account? Log in"}
+                        </Link>
+                    </Grid>
+                </Grid>
+            </Box>
+        {/* </div> */}
+        </Box>
+        <Copyright sx={{ mt: 8, mb: 4}}/>
+        </Container>
+        </ThemeProvider>
     );
 }
 
 export default Login;
+
+const Logo = styled.h1`
+  font-family: 'Press Start 2P', cursive;
+  font-size: 4rem;
+  color: #000;
+  margin: 0;
+  line-height: 1;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+`;

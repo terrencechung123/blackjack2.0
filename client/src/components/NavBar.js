@@ -32,18 +32,7 @@ function NavBar({ user, setUser }) {
   );
 }
 
-const Wrapper = styled.header`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  background-color: rgba(255,255,255,0.8)
-`;
+export default NavBar;
 
 const Logo = styled.h1`
   font-family: 'Press Start 2P', cursive;
@@ -64,4 +53,16 @@ const Nav = styled.nav`
   right: 8px;
 `;
 
-export default NavBar;
+const Wrapper = styled.header`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background-color: rgba(255,255,255,0.8)
+  `;
+
