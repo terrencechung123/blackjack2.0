@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
 import { Box, Button } from "../styles";
 const backCard = 'https://deckofcardsapi.com/static/img/back.png'
-
+// import style from './index.css'
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -410,11 +410,11 @@ function Blackjack({ user }) {
             ) : (
               <div>
                 <div style={{ display: "flex", justifyContent: "center", marginTop:"50px" }}>
-                  <div style={{ marginRight: "20px" }}>
-                    <Button onClick={hit}>Hit</Button>
+                  <div style={{ marginLeft: "40px", marginBottom:"40px"}}>
+                    <button id="arcade-button" onClick={hit}>Hit</button>
                   </div>
-                  <div style={{ marginLeft: "20px" }}>
-                    <Button onClick={stand}>Stand</Button>
+                  <div style={{ marginLeft: "100px" }}>
+                    <button id="arcade-button" onClick={stand}>Stand</button>
                   </div>
                   <div style={{ marginLeft: "40px" }}>
                   {(calculateHandValue(userHand) <= 11) ?
@@ -480,12 +480,12 @@ function Blackjack({ user }) {
 }
 
 
+
 const Wrapper = styled.section`
   max-width: 100%;
   /* height:100vh; */
   margin: 40px auto;
   transform: translate(0, 4.5%);
   `;
-
 
 export default Blackjack;

@@ -55,7 +55,7 @@ const MainContainer = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: darkgreen;
+  background-color: #00734a;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
