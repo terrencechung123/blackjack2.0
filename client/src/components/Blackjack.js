@@ -410,15 +410,15 @@ function Blackjack({ user }) {
             ) : (
               <div>
                 <div style={{ display: "flex", justifyContent: "center", marginTop:"50px" }}>
-                  <div style={{ marginLeft: "40px", marginBottom:"40px"}}>
+                  <div style={{  marginBottom:"40px"}}>
                     <button id="arcade-button" onClick={hit}>Hit</button>
                   </div>
-                  <div style={{ marginLeft: "100px" }}>
+                  <div style={{ marginLeft: "60px" }}>
                     <button id="arcade-button" onClick={stand}>Stand</button>
                   </div>
-                  <div style={{ marginLeft: "40px" }}>
+                  <div style={{ marginLeft: "60px" }}>
                   {(calculateHandValue(userHand) <= 11) ?
-                    <Button onClick={doubleDown}>Double Down</Button>
+                    <button id="arcade-button" onClick={doubleDown}>Double Down</button>
                   : null}
                   </div>
                 </div>
