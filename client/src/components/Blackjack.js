@@ -24,64 +24,96 @@ function Blackjack({ user }) {
   const [betAmount,setBetAmount] = useState(0)
   const [funds,setFunds] = useState(1000)
 
+  useEffect(()=>{
+    fetch(`/games`)
+    .then(r=>r.json())
+    .then(data=>{
+      const filteredGames = data.find(game => game.user.id === user.id && game.result === "In Progress");
+      console.log(filteredGames)
+      if (filteredGames && Object.keys(filteredGames).length > 0) {
+        setGames(filteredGames);
+        setGameStart(true);
+        const userHandmap=(JSON.parse(filteredGames.user_hand)).map(card=>card)
+        setUserHand(userHandmap)
+      } else {
+        console.log('hello');
+      }
+    })
+  },[])
+  console.log('hello',userHand)
+  // useEffect(()=>{
+  // },[setGames])
 
+  // console.log('hallo',(JSON.parse(games.user_hand)).map(card=>card))
+  // console.log('userhandmap',userHandmap)
 
+  // console.log(games.user.id)
+  // console.log(games.user_hand)
+  // console.log(JSON.parse(games.user_hand))
+  // console.log('getImages', userHandmap.map(image=>image))
 
+  // const game5 = games[5].user_hand
+  // console.log('parse',JSON.parse(game5))
+  // const parseGame5 = JSON.parse(game5)
+  // console.log('games', games[0].user_hand)
+  // console.log('parseGam5', parseGame5)
+  // newGaem = parseGame5.map(card=>card.value)
+  // console.log('newGaem',newGaem)
   //fetch game on user login, if game.user.id does not match user.id don't display game and return them to the start game page
-  useEffect(() => {
-    const gameState = JSON.parse(localStorage.getItem('blackjack-game'));
-    if (gameState) {
-      fetch(`/games/${gameState.game.id}`)
-        .then(r => r.json())
-        .then(data => {
-          setGames(data);
-          if (data.id === gameState.game.id) {
-            setCards(gameState.cards);
-            setDealerHand(gameState.dealerHand);
-            setUserHand(gameState.userHand);
-            setGameResult(gameState.gameResult);
-            setIsGameOver(gameState.isGameOver);
-            setGame(gameState.game);
-            setBetAmount(gameState.betAmount);
-            setFunds(gameState.funds)
-          } else {
-            setGameStart(false);
-            setIsGameOver(true);
-          }
-        });
-    }
-  }, []);
+  // useEffect(() => {
+  //   const gameState = JSON.parse(localStorage.getItem('blackjack-game'));
+  //   if (gameState) {
+  //     fetch(`/games/${gameState.game.id}`)
+  //       .then(r => r.json())
+  //       .then(data => {
+  //         setGames(data);
+  //         if (data.id === gameState.game.id) {
+  //           setCards(gameState.cards);
+  //           setDealerHand(gameState.dealerHand);
+  //           setUserHand(gameState.userHand);
+  //           setGameResult(gameState.gameResult);
+  //           setIsGameOver(gameState.isGameOver);
+  //           setGame(gameState.game);
+  //           setBetAmount(gameState.betAmount);
+  //           setFunds(gameState.funds)
+  //         } else {
+  //           setGameStart(false);
+  //           setIsGameOver(true);
+  //         }
+  //       });
+  //   }
+  // }, []);
 
   //loads game
-  useEffect(() => {
-    const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
-    if (storedGame.user.id == user.id) {
-      setGame(storedGame);
-      setGameStart(true);
-    }
-    else {
-      setGame([]);
-      setGameStart(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
+  //   if (storedGame.user.id == user.id) {
+  //     setGame(storedGame);
+  //     setGameStart(true);
+  //   }
+  //   else {
+  //     setGame([]);
+  //     setGameStart(false);
+  //   }
+  // }, []);
 
-  // Save the game state to localStorage whenever it changes
-  useEffect(() => {
-    if (game) {
-      const gameState = {
-        cards,
-        dealerHand,
-        userHand,
-        gameStart,
-        gameResult,
-        game,
-        isGameOver,
-        betAmount,
-        funds
-      };
-      localStorage.setItem('blackjack-game', JSON.stringify(gameState));
-    }
-  }, [cards, dealerHand, userHand, gameResult, isGameOver, game, gameStart, betAmount, funds]);
+  // // // Save the game state to localStorage whenever it changes
+  // useEffect(() => {
+  //   if (game) {
+  //     const gameState = {
+  //       cards,
+  //       dealerHand,
+  //       userHand,
+  //       gameStart,
+  //       gameResult,
+  //       game,
+  //       isGameOver,
+  //       betAmount,
+  //       funds
+  //     };
+  //     localStorage.setItem('blackjack-game', JSON.stringify(gameState));
+  //   }
+  // }, [cards, dealerHand, userHand, gameResult, isGameOver, game, gameStart, betAmount, funds]);
 
   //fetch cards
   useEffect(() => {
@@ -105,9 +137,11 @@ function Blackjack({ user }) {
     const newDealerHand = [cards.pop(), '*'];
     const newUserHand = [cards.pop(), cards.pop()];
     const dealerHandNames = JSON.stringify(newDealerHand.map(card => card.name));
-    const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
+    const userHandNames = JSON.stringify(newUserHand.map(card => [card.name, card.suit, card.value, card.image]));
     setDealerHand(newDealerHand);
     setUserHand(newUserHand);
+    const parsedUserHand = JSON.parse(userHandNames)
+    console.log('parsedUserHand',parsedUserHand)
     const response = await fetch('/games', {
       method: 'POST',
       headers: {
@@ -131,7 +165,7 @@ function Blackjack({ user }) {
     let sum = 0;
     let numAces = 0;
     cards.forEach(card => {
-        const value = card.value;
+        const value = card[2];
         if (value === 11) {
             numAces++;
           }
@@ -216,12 +250,13 @@ function Blackjack({ user }) {
     }
   }
 
+  console.log(cards)
 
   async function hit() {
     const newUserHand = [...userHand];
     newUserHand.push(cards.pop());
     // Update the game state to reflect the new card being added to the user's hand
-    const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
+    const userHandNames = JSON.stringify(newUserHand.map(card => [card.name, card.suit, card.value, card.image]));
     const response = await fetch(`/games/${game.id}`, {
       method: 'PATCH',
       headers: {
@@ -240,7 +275,7 @@ function Blackjack({ user }) {
       betResult(result);
       setGameResult(result);
       setIsGameOver(true);
-      const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
+      const userHandNames = JSON.stringify(newUserHand.map(card => [card.name, card.suit, card.value, card.image]));
       const response = await fetch(`/games/${game.id}`, {
         method: 'PATCH',
         headers: {
@@ -359,6 +394,11 @@ function Blackjack({ user }) {
         <Wrapper>
           {gameStart ? (
             <Box>
+            {/* <div>
+    {userHandmap.map((imageUrl, index) => (
+      <img key={index} src={imageUrl} alt={`Card ${index}`} />
+    ))}
+  </div> */}
             <h1>Dealer: </h1>
             <p>
               {dealerHand.map((card, index) => (
@@ -425,12 +465,19 @@ function Blackjack({ user }) {
               </div>
             )}
             <h1>{user.username}: </h1>
+
+            backendUserhand
+            {/* <div>
+              {userHandmap.map((imageUrl, index) => (
+                <img key={index} src={imageUrl} alt={`Card ${index}`} />
+              ))}
+            </div> */}
             <p>
               {userHand.map((card, index) => (
                 <img
                   key={index}
-                  src={card.image ? card.image : backCard}
-                  alt={`${card.value} of ${card.suit}`}
+                  src={card[3] ? card[3] : backCard}
+                  alt={card[0]}
                 />
               ))}
             </p>
