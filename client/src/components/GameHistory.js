@@ -30,7 +30,7 @@ function GameHistory({user}) {
 
   return (
     <Wrapper>
-      <h1 style={{ fontSize: "2rem", fontFamily: "'Press Start 2P', cursive" }}>
+      <h1 style={{ marginTop: "50px", fontSize: "2rem", fontFamily: "'Press Start 2P', cursive" }}>
         Games
       </h1>
       {filteredGames.length > 0 ? (
@@ -69,6 +69,7 @@ function GameHistory({user}) {
                   marginRight: "10px",
                   backgroundColor: "#d12d36",
                   color: "white",
+                  marginTop:"20px"
                 }}
               >
                 Delete game
@@ -79,9 +80,11 @@ function GameHistory({user}) {
       ) : (
         <>
           <h3>No Games Found</h3>
+          <div style={{marginTop:"20px"}}>
           <Button as={Link} to="/blackjack">
             Go To Game Page
           </Button>
+          </div>
         </>
       )}
     </Wrapper>

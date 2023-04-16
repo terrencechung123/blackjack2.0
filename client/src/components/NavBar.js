@@ -18,9 +18,9 @@ function NavBar({ user, setUser }) {
         <Link to="/blackjack">FlatJack</Link>
       </Logo>
       <Nav>
-        <Button as={Link} to="/profile">
+        {/* <Button as={Link} to="/profile">
           Profile
-        </Button>
+        </Button> */}
         <Button as={Link} to="/game_history">
             Game History
           </Button>
