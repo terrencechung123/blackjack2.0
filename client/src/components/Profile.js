@@ -15,8 +15,8 @@ const Profile = ({user}) => {
 console.log('userData',userData)
   return (
     <Wrapper>
-        <h1 style={{marginTop: "50px", fontSize: "2rem", fontFamily: "'Press Start 2P', cursive" }}>
-          Hello, {user.username}
+        <h1 style={{textDecoration: "underline", marginTop: "50px", fontSize: "2rem", fontFamily: "'Press Start 2P', cursive" }}>
+          {user.username}'s Profile
         </h1>
           {userData ? (
           <>

@@ -45,7 +45,7 @@ function GameHistory({user}) {
       <h1
         style={{
           marginTop: "50px",
-          fontSize: "2rem",
+          fontSize: "3.5rem",
           fontFamily: "'Press Start 2P', cursive",
         }}
       >
@@ -55,7 +55,7 @@ function GameHistory({user}) {
         <Grid>
           {filteredGames.map((game) => (
             <GameBox key={game.id}>
-              <h1 style={{fontSize:"35px"}}>{"Game " + game.id}</h1>
+              <h1 style={{fontSize:"35px", textDecoration: "underline"}}>{"Game " + game.id}</h1>
               {/* <h3>{"User: " + game.user.username}</h3> */}
               &nbsp;
               <h1 style={{fontSize:"27px"}}>Dealer Hand:</h1>
