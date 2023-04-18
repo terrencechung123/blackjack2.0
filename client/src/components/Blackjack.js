@@ -80,7 +80,7 @@ function Blackjack({ user }) {
           funds: funds
         }),
       })
-    }, [betAmount, funds]);
+    }, [betAmount, funds,user.id]);
 
     async function startNewGame() {
       console.log('hi');
@@ -251,7 +251,7 @@ function Blackjack({ user }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          result: JSON.stringify(result),
+          result: result,
           user_hand: userHandNames,
           user_id: user.id,
           // betAmount: 0,
