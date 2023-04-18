@@ -22,12 +22,14 @@ function Blackjack({ user }) {
   const [games, setGames] = useState([]);
   const [betAmount, setBetAmount] = useState(0);
   const [funds, setFunds] = useState(1000);
+  const [deck,setDeck] = useState([]);
 
   useEffect(() => {
     fetch("/cards")
       .then((r) => r.json())
       .then((data) => {
-        setCards(shuffleArray(data));
+        setCards(data);
+        console.log('hello')
       });
   }, []);
   // console.log(cards)
@@ -42,7 +44,7 @@ function Blackjack({ user }) {
           .sort((a, b) => b.createdAt - a.createdAt)
           .pop();
         if (game) {
-          setCards(JSON.parse(game.deck));
+          setDeck(JSON.parse(game.deck));
           setGameStart(game.gameStart);
           setGame(game);
           setDealerHand(JSON.parse(game.dealer_hand));
@@ -119,7 +121,8 @@ function Blackjack({ user }) {
   //fetch cards
 
   async function startNewGame() {
-    const deck = [...cards];
+    console.log('hi');
+    const deck = shuffleArray([...cards]);
     // Remove the cards that have already been dealt in the current game
     [...dealerHand, ...userHand].forEach((card) => {
       const index = deck.findIndex((c) => c.code === card.code);
@@ -127,8 +130,8 @@ function Blackjack({ user }) {
         deck.splice(index, 1);
       }
     });
-    const newDealerHand = [cards.pop(), "*"];
-    const newUserHand = [cards.pop(), cards.pop()];
+    const newDealerHand = [deck.pop(), "*"];
+    const newUserHand = [deck.pop(), deck.pop()];
     const dealerHandNames = JSON.stringify(newDealerHand.map((card) => card));
     const userHandNames = JSON.stringify(newUserHand.map((card) => card));
     setDealerHand(newDealerHand);
@@ -175,7 +178,7 @@ function Blackjack({ user }) {
 
   async function doubleDown() {
     const newUserHand = [...userHand];
-    newUserHand.push(cards.pop());
+    newUserHand.push(deck.pop());
     const userHandValue = calculateHandValue(newUserHand);
     let result;
     let newFunds;
@@ -205,9 +208,9 @@ function Blackjack({ user }) {
       });
     } else {
       const newDealerHand = [...dealerHand];
-      newDealerHand[1] = cards.pop(); // reveal the dealer's hidden card
+      newDealerHand[1] = deck.pop(); // reveal the dealer's hidden card
       while (calculateHandValue(newDealerHand) < 17) {
-        newDealerHand.push(cards.pop()); // keep drawing cards until the dealer's hand value is at least 17
+        newDealerHand.push(deck.pop()); // keep drawing cards until the dealer's hand value is at least 17
       }
       setDealerHand(newDealerHand);
       setUserHand(newUserHand);
@@ -259,7 +262,7 @@ function Blackjack({ user }) {
 
   async function hit() {
     const newUserHand = [...userHand];
-    newUserHand.push(cards.pop());
+    newUserHand.push(deck.pop());
     // Update the game state to reflect the new card being added to the user's hand
     const userHandNames = JSON.stringify(newUserHand.map((card) => card));
     const response = await fetch(`/games/${game.id}`, {
@@ -270,7 +273,7 @@ function Blackjack({ user }) {
       body: JSON.stringify({
         user_hand: userHandNames,
         user_id: user.id,
-        deck: JSON.stringify(cards)
+        deck: JSON.stringify(deck)
       }),
     });
     const data = await response.json();
@@ -300,9 +303,9 @@ function Blackjack({ user }) {
 
   async function stand() {
     const newDealerHand = [...dealerHand];
-    newDealerHand[1] = cards.pop(); // reveal the dealer's hidden card
+    newDealerHand[1] = deck.pop(); // reveal the dealer's hidden card
     while (calculateHandValue(newDealerHand) < 17) {
-      newDealerHand.push(cards.pop()); // keep drawing cards until the dealer's hand value is at least 17
+      newDealerHand.push(deck.pop()); // keep drawing cards until the dealer's hand value is at least 17
     }
     setDealerHand(newDealerHand);
     const userHandValue = calculateHandValue(userHand);
@@ -403,6 +406,19 @@ function Blackjack({ user }) {
     if (funds >= 100) {
       setFunds(funds - 100);
     }
+  }
+
+  async function updateBet(funds, bet){
+    const response = await fetch(`/games/${game.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        funds: funds,
+        betAmount: betAmount
+      }),
+    });
   }
 
   return (
