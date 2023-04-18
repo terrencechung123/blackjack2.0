@@ -132,7 +132,7 @@ function Login({ setUser }) {
                 <Grid container>
                     <Grid item xs>
                         <Link href="#" variant="body2" onClick={handleClick}>
-                            {signup?"Don't have an account? Sign Up": "Already have an account? Log in"}
+                            {signup?"Already have an account? Log in": "Don't have an account? Sign Up"}
                         </Link>
                     </Grid>
                 </Grid>
