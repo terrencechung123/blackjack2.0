@@ -374,7 +374,12 @@ function Blackjack({ user }) {
     }
   }
 
-
+  async function resetFunds(){
+    if(window.confirm("Are you sure you want to reset your funds?")){
+    setBetAmount(0)
+    setFunds(1000)
+    }
+  }
 
   return (
     <>
@@ -451,10 +456,7 @@ function Blackjack({ user }) {
                       <Button onClick={betReset}>Reset Bet Amount</Button>
                     </div>
                     <div style={{ marginLeft: "40px" }}>
-                      <Button onClick={addFunds}>Cash In $100</Button>
-                    </div>
-                    <div style={{ marginLeft: "60px" }}>
-                      <Button onClick={takeFunds}>Cash Out $100</Button>
+                      <Button onClick={resetFunds}>Reset Funds</Button>
                     </div>
                   </div>
                 </div>
@@ -545,10 +547,7 @@ function Blackjack({ user }) {
                 <Button onClick={betReset}>Reset Bet Amount</Button>
               </div>
               <div style={{ marginLeft: "40px" }}>
-                <Button onClick={addFunds}>Add $100 To Funds</Button>
-              </div>
-              <div style={{ marginLeft: "60px" }}>
-                <Button onClick={takeFunds}>Take $100 From Funds</Button>
+                <Button onClick={resetFunds}>Reset Funds</Button>
               </div>
             </div>
           </Box>
