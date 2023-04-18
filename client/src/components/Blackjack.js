@@ -24,108 +24,70 @@ function Blackjack({ user }) {
   const [funds, setFunds] = useState(1000);
   const [deck,setDeck] = useState([]);
 
+  
   useEffect(() => {
     fetch("/cards")
-      .then((r) => r.json())
-      .then((data) => {
-        setCards(data);
-        console.log('hello')
-      });
+    .then((r) => r.json())
+    .then((data) => {
+      setCards(data);
+      console.log('hello')
+    });
   }, []);
   // console.log(cards)
-
+  
   useEffect(() => {
     fetch(`/games`)
-      .then((response) => response.json())
-      .then((games) => {
-        // const game = games.find(game => game.user.id === user.id && game.result === 'In Progress');
-        const game = games
-          .filter((game) => game.user.id === user.id)
-          .sort((a, b) => b.createdAt - a.createdAt)
-          .pop();
-        if (game) {
-          setDeck(JSON.parse(game.deck));
-          setGameStart(game.gameStart);
-          setGame(game);
-          setDealerHand(JSON.parse(game.dealer_hand));
-          setUserHand(JSON.parse(game.user_hand));
-          setGameResult(game.result);
-          setIsGameOver(game.isGameOver);
-          setBetAmount(game.betAmount);
-          setFunds(game.funds);
-        }
-        console.log("game", game);
-        console.log(
-          "games",
-          games.filter((game) => game.result)
+    .then((response) => response.json())
+    .then((games) => {
+      // const game = games.find(game => game.user.id === user.id && game.result === 'In Progress');
+      const game = games
+      .filter((game) => game.user.id === user.id)
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .pop();
+      if (game) {
+        setDeck(JSON.parse(game.deck));
+        setGameStart(game.gameStart);
+        setGame(game);
+        setDealerHand(JSON.parse(game.dealer_hand));
+        setUserHand(JSON.parse(game.user_hand));
+        setGameResult(game.result);
+        setIsGameOver(game.isGameOver);
+        // setBetAmount(game.betAmount);
+        // setFunds(game.funds);
+      }
+      console.log("game", game);
+      console.log(
+        "games",
+        games.filter((game) => game.result)
         );
       });
-  }, []);
+      fetch(`/users/${user.id}`)
+      .then((response)=>response.json())
+      .then((user)=>{
+        setBetAmount(user.betAmount);
+        setFunds(user.funds);
+      })
+    }, []);
 
-  //fetch game on user login, if game.user.id does not match user.id don't display game and return them to the start game page
-  // useEffect(() => {
-  //   const gameState = JSON.parse(localStorage.getItem('blackjack-game'));
-  //   if (gameState) {
-  //     fetch(`/games/${gameState.game.id}`)
-  //       .then(r => r.json())
-  //       .then(data => {
-  //         setGames(data);
-  //         if (data.id === gameState.game.id) {
-  //           setCards(gameState.cards);
-  //           setDealerHand(gameState.dealerHand);
-  //           setUserHand(gameState.userHand);
-  //           setGameResult(gameState.gameResult);
-  //           setIsGameOver(gameState.isGameOver);
-  //           setGame(gameState.game);
-  //           setBetAmount(gameState.betAmount);
-  //           setFunds(gameState.funds)
-  //         } else {
-  //           setGameStart(false);
-  //           setIsGameOver(true);
-  //         }
-  //       });
-  //   }
-  // }, []);
+    useEffect(()=>{
+      fetch(`/users/${user.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          betAmount: betAmount,
+          funds: funds
+        }),
+      })
+    }, [betAmount, funds]);
 
-  // //loads game
-  // useEffect(() => {
-  //   const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
-  //   if (storedGame.user.id == user.id) {
-  //     setGame(storedGame);
-  //     setGameStart(true);
-  //   }
-  //   else {
-  //     setGame([]);
-  //     setGameStart(false);
-  //   }
-  // }, []);
-
-  // // Save the game state to localStorage whenever it changes
-  // useEffect(() => {
-  //   if (game) {
-  //     const gameState = {
-  //       cards,
-  //       dealerHand,
-  //       userHand,
-  //       gameStart,
-  //       gameResult,
-  //       game,
-  //       isGameOver,
-  //       betAmount,
-  //       funds
-  //     };
-  //     localStorage.setItem('blackjack-game', JSON.stringify(gameState));
-  //   }
-  // }, [cards, dealerHand, userHand, gameResult, isGameOver, game, gameStart, betAmount, funds]);
-
-  //fetch cards
-
-  async function startNewGame() {
-    console.log('hi');
-    const deck = shuffleArray([...cards]);
-    // Remove the cards that have already been dealt in the current game
-    [...dealerHand, ...userHand].forEach((card) => {
-      const index = deck.findIndex((c) => c.code === card.code);
+    async function startNewGame() {
+      console.log('hi');
+      const deck = shuffleArray([...cards]);
+      // Remove the cards that have already been dealt in the current game
+      [...dealerHand, ...userHand].forEach((card) => {
+        const index = deck.findIndex((c) => c.code === card.code);
       if (index !== -1) {
         deck.splice(index, 1);
       }

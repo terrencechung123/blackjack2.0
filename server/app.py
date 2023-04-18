@@ -100,6 +100,8 @@ class GameById(Resource):
         response = make_response(game_dict, 200)
         return response
 
+    
+
     def delete(self, id):
         game = Game.query.filter_by(id=id).first()
         if not game:

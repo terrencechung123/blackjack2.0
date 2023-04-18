@@ -8,7 +8,7 @@ const Profile = ({user}) => {
 
   return (
     <Wrapper>
-        <h1>Hello, {user.username}</h1>
+        <h1 style={{marginTop: "50px", fontSize: "2rem", fontFamily: "'Press Start 2P', cursive" }}>Hello, {user.username}</h1>
     </Wrapper>
   )
 }
