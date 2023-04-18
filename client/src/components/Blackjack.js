@@ -96,10 +96,6 @@ function Blackjack({ user }) {
     const newUserHand = [deck.pop(), deck.pop()];
     const dealerHandNames = JSON.stringify(newDealerHand.map((card) => card));
     const userHandNames = JSON.stringify(newUserHand.map((card) => card));
-    setDealerHand(newDealerHand);
-    setUserHand(newUserHand);
-    setGameStart(true);
-    setIsGameOver(false);
     const response = await fetch("/games", {
       method: "POST",
       headers: {
@@ -118,7 +114,13 @@ function Blackjack({ user }) {
       }),
     });
     const data = await response.json(); // This will log the newly created game object
+    setDealerHand(newDealerHand);
+    setUserHand(newUserHand);
+    setIsGameOver(false);
     setGame(data);
+    if (gameStart===false){
+      setGameStart(true);
+      window.location.reload()}
   }
 
   function calculateHandValue(cards) {
