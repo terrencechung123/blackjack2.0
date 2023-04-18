@@ -39,7 +39,6 @@ function Blackjack({ user }) {
     fetch(`/games`)
     .then((response) => response.json())
     .then((games) => {
-      // const game = games.find(game => game.user.id === user.id && game.result === 'In Progress');
       const game = games
       .filter((game) => game.user.id === user.id)
       .sort((a, b) => b.createdAt - a.createdAt)
@@ -255,7 +254,8 @@ function Blackjack({ user }) {
           user_hand: userHandNames,
           user_id: user.id,
           betAmount: 0,
-          isGameOver: true
+          isGameOver: true,
+          deck: JSON.stringify(deck)
         }),
       });
       setGameResult(result);
