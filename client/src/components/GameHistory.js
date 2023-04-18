@@ -58,8 +58,8 @@ function GameHistory({user}) {
               <h1 style={{fontSize:"35px", textDecoration: "underline"}}>{"Game " + game.id}</h1>
               {/* <h3>{"User: " + game.user.username}</h3> */}
               &nbsp;
-              <h1 style={{fontSize:"27px"}}>Dealer Hand:</h1>
-              <h2 style={{color:"#800020"}}>
+              <h1 style={{fontSize:"27px", textDecoration: "underline"}}>Dealer Hand:</h1>
+              <h2 style={{color:"black"}}>
                 {
                   JSON.parse(game.dealer_hand)
                     .map((card) => card.name)
@@ -67,8 +67,8 @@ function GameHistory({user}) {
                 }
               </h2>
               &nbsp;
-              <h1>User Hand:</h1>
-              <h2 style={{color:"#800020"}}>
+              <h1 style={{textDecoration: "underline"}}>User Hand:</h1>
+              <h2 style={{color:"black"}}>
                 {
                   JSON.parse(game.user_hand)
                   .map((card) => card.name)
@@ -76,14 +76,14 @@ function GameHistory({user}) {
                 }
               </h2>
               &nbsp;
-              <h1 style={{fontSize:"27px"}}>Result:</h1>
-              <h2 style={{color:"#800020"}}>{game.result}</h2>
+              <h1 style={{fontSize:"27px",textDecoration: "underline"}}>Result:</h1>
+              <h2 style={{color:"black"}}>{game.result}</h2>
               &nbsp;
-              <h1 style={{fontSize:"27px"}}>Bet Amount:</h1>
-              <h2 style={{color:"#800020"}}>{game.betAmount}</h2>
+              <h1 style={{fontSize:"27px",textDecoration: "underline"}}>Bet Amount:</h1>
+              <h2 style={{color:"black"}}>{game.betAmount}</h2>
               &nbsp;
-              <h1 style={{fontSize:"27px"}}>Funds:</h1>
-              <h2 style={{color:"#800020"}}>{game.funds}</h2>
+              <h1 style={{fontSize:"27px",textDecoration: "underline"}}>Funds:</h1>
+              <h2 style={{color:"black"}}>{game.funds}</h2>
               <Button
                 onClick={() => handleDeleteGame(game.id)}
                 style={{
