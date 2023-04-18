@@ -74,7 +74,10 @@ class Games(Resource):
             user_hand = data['user_hand'],
             #user = data["user"],
             result = data["result"],
-            user_id = data["user_id"]
+            user_id = data["user_id"],
+            isGameOver = data["isGameOver"],
+            betAmount = data["betAmount"],
+            funds = data["funds"]
         )
         db.session.add(game)
         db.session.commit()

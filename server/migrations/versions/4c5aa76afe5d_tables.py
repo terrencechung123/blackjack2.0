@@ -1,8 +1,8 @@
 """tables
 
-Revision ID: 822342f88aa3
+Revision ID: 4c5aa76afe5d
 Revises: 
-Create Date: 2023-04-13 13:54:28.833226
+Create Date: 2023-04-18 00:54:53.311793
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '822342f88aa3'
+revision = '4c5aa76afe5d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -30,6 +30,9 @@ def upgrade():
     sa.Column('result', sa.String(), nullable=True),
     sa.Column('user_hand', sa.String(), nullable=True),
     sa.Column('dealer_hand', sa.String(), nullable=True),
+    sa.Column('isGameOver', sa.String(), nullable=True),
+    sa.Column('betAmount', sa.String(), nullable=True),
+    sa.Column('setFunds', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

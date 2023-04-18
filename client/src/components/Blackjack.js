@@ -23,65 +23,83 @@ function Blackjack({ user }) {
   const [games,setGames] = useState([])
   const [betAmount,setBetAmount] = useState(0)
   const [funds,setFunds] = useState(1000)
-
-
-
+  
+  useEffect(() => {
+      fetch(`/games`)
+        .then(response => response.json())
+        .then(games => {
+          const game = games.find(game => game.user.id === user.id && game.result === 'In Progress');
+          if (game){
+            setGameStart(true)
+            setGame(game);
+            setDealerHand(JSON.parse(game.dealer_hand));
+            setUserHand(JSON.parse(game.user_hand));
+            setGameResult(game.result);
+            setIsGameOver(game.isGameOver);
+            setBetAmount(game.betAmount);
+            setFunds(game.funds);
+          }
+          console.log('games',games.filter(game=>game.result));
+        })
+      },[])
+  
+  
 
   //fetch game on user login, if game.user.id does not match user.id don't display game and return them to the start game page
-  useEffect(() => {
-    const gameState = JSON.parse(localStorage.getItem('blackjack-game'));
-    if (gameState) {
-      fetch(`/games/${gameState.game.id}`)
-        .then(r => r.json())
-        .then(data => {
-          setGames(data);
-          if (data.id === gameState.game.id) {
-            setCards(gameState.cards);
-            setDealerHand(gameState.dealerHand);
-            setUserHand(gameState.userHand);
-            setGameResult(gameState.gameResult);
-            setIsGameOver(gameState.isGameOver);
-            setGame(gameState.game);
-            setBetAmount(gameState.betAmount);
-            setFunds(gameState.funds)
-          } else {
-            setGameStart(false);
-            setIsGameOver(true);
-          }
-        });
-    }
-  }, []);
+  // useEffect(() => {
+  //   const gameState = JSON.parse(localStorage.getItem('blackjack-game'));
+  //   if (gameState) {
+  //     fetch(`/games/${gameState.game.id}`)
+  //       .then(r => r.json())
+  //       .then(data => {
+  //         setGames(data);
+  //         if (data.id === gameState.game.id) {
+  //           setCards(gameState.cards);
+  //           setDealerHand(gameState.dealerHand);
+  //           setUserHand(gameState.userHand);
+  //           setGameResult(gameState.gameResult);
+  //           setIsGameOver(gameState.isGameOver);
+  //           setGame(gameState.game);
+  //           setBetAmount(gameState.betAmount);
+  //           setFunds(gameState.funds)
+  //         } else {
+  //           setGameStart(false);
+  //           setIsGameOver(true);
+  //         }
+  //       });
+  //   }
+  // }, []);
 
-  //loads game
-  useEffect(() => {
-    const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
-    if (storedGame.user.id == user.id) {
-      setGame(storedGame);
-      setGameStart(true);
-    }
-    else {
-      setGame([]);
-      setGameStart(false);
-    }
-  }, []);
+  // //loads game
+  // useEffect(() => {
+  //   const storedGame = JSON.parse(localStorage.getItem('blackjack-game'))?.game;
+  //   if (storedGame.user.id == user.id) {
+  //     setGame(storedGame);
+  //     setGameStart(true);
+  //   }
+  //   else {
+  //     setGame([]);
+  //     setGameStart(false);
+  //   }
+  // }, []);
 
-  // Save the game state to localStorage whenever it changes
-  useEffect(() => {
-    if (game) {
-      const gameState = {
-        cards,
-        dealerHand,
-        userHand,
-        gameStart,
-        gameResult,
-        game,
-        isGameOver,
-        betAmount,
-        funds
-      };
-      localStorage.setItem('blackjack-game', JSON.stringify(gameState));
-    }
-  }, [cards, dealerHand, userHand, gameResult, isGameOver, game, gameStart, betAmount, funds]);
+  // // Save the game state to localStorage whenever it changes
+  // useEffect(() => {
+  //   if (game) {
+  //     const gameState = {
+  //       cards,
+  //       dealerHand,
+  //       userHand,
+  //       gameStart,
+  //       gameResult,
+  //       game,
+  //       isGameOver,
+  //       betAmount,
+  //       funds
+  //     };
+  //     localStorage.setItem('blackjack-game', JSON.stringify(gameState));
+  //   }
+  // }, [cards, dealerHand, userHand, gameResult, isGameOver, game, gameStart, betAmount, funds]);
 
   //fetch cards
   useEffect(() => {
@@ -104,8 +122,8 @@ function Blackjack({ user }) {
     });
     const newDealerHand = [cards.pop(), '*'];
     const newUserHand = [cards.pop(), cards.pop()];
-    const dealerHandNames = JSON.stringify(newDealerHand.map(card => card.name));
-    const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
+    const dealerHandNames = JSON.stringify(newDealerHand.map(card => card));
+    const userHandNames = JSON.stringify(newUserHand.map(card => card));
     setDealerHand(newDealerHand);
     setUserHand(newUserHand);
     const response = await fetch('/games', {
@@ -117,7 +135,11 @@ function Blackjack({ user }) {
         dealer_hand: dealerHandNames,
         user_hand: userHandNames,
         result:'In Progress',
-        user_id:user.id
+        user_id:user.id,
+        isGameOver: isGameOver,
+        betAmount: betAmount,
+        funds: funds
+
       })
     });
     const data = await response.json();// This will log the newly created game object
@@ -157,7 +179,7 @@ function Blackjack({ user }) {
         setGameResult(result);
         // betResult(result);
         setIsGameOver(true);
-        const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
+        const userHandNames = JSON.stringify(newUserHand.map(card => card));
         const response = await fetch(`/games/${game.id}`, {
           method: 'PATCH',
           headers: {
@@ -199,8 +221,8 @@ function Blackjack({ user }) {
       setGameResult(result);
       // betResult(result);
       setIsGameOver(true);
-      const dealerHandNames = JSON.stringify(newDealerHand.map(card => card.name));
-      const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
+      const dealerHandNames = JSON.stringify(newDealerHand.map(card => card));
+      const userHandNames = JSON.stringify(newUserHand.map(card => card));
       const response = await fetch(`/games/${game.id}`, {
         method: 'PATCH',
         headers: {
@@ -221,7 +243,7 @@ function Blackjack({ user }) {
     const newUserHand = [...userHand];
     newUserHand.push(cards.pop());
     // Update the game state to reflect the new card being added to the user's hand
-    const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
+    const userHandNames = JSON.stringify(newUserHand.map(card => card));
     const response = await fetch(`/games/${game.id}`, {
       method: 'PATCH',
       headers: {
@@ -240,7 +262,7 @@ function Blackjack({ user }) {
       betResult(result);
       setGameResult(result);
       setIsGameOver(true);
-      const userHandNames = JSON.stringify(newUserHand.map(card => card.name));
+      const userHandNames = JSON.stringify(newUserHand.map(card => card));
       const response = await fetch(`/games/${game.id}`, {
         method: 'PATCH',
         headers: {
@@ -280,8 +302,8 @@ function Blackjack({ user }) {
     setGameResult(result);
     betResult(result);
     setIsGameOver(true);
-    const dealerHandNames = JSON.stringify(newDealerHand.map(card => card.name));
-    const userHandNames = JSON.stringify(userHand.map(card => card.name));
+    const dealerHandNames = JSON.stringify(newDealerHand.map(card => card));
+    const userHandNames = JSON.stringify(userHand.map(card => card));
     const response = await fetch(`/games/${game.id}`, {
       method: 'PATCH',
       headers: {
@@ -291,9 +313,42 @@ function Blackjack({ user }) {
         dealer_hand: dealerHandNames,
         result: result,
         user_hand: userHandNames,
-        user_id: user.id
+        user_id: user.id,
+        gameResult,
+        gameStart,
+        isGameOver,
+        betAmount,
+        funds,
       })
     });
+  }
+
+
+
+  //       .then(response => response.json())
+  //       .then(gameData => {
+  //       })
+  //       .catch(error => console.log(error));
+  //   }
+  // ,[user.id]);
+
+  async function updateGame() {
+    const response = await fetch(`/games/${game.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        dealer_hand: JSON.stringify(dealerHand),
+        user_hand: JSON.stringify(userHand),
+        gameResult,
+        isGameOver,
+        betAmount,
+        funds
+      })
+    });
+    const data = await response.json();
+    setGame(data);
   }
 
 
