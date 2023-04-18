@@ -13,8 +13,8 @@ class User(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
     _password_hash = db.Column(db.String)
-    betAmount = db.Column(db.Integer)
-    funds = db.Column(db.Integer)
+    betAmount = db.Column(db.Integer, default=0)
+    funds = db.Column(db.Integer, default=1000)
 
     games = db.relationship('Game', backref='user')
     cards = association_proxy('games', 'card')
