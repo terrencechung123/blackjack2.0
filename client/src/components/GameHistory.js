@@ -27,7 +27,8 @@ function GameHistory({user}) {
     });
   }
   const filteredGames = games.filter((game) => game.user.id === user.id);
-
+  const game = filteredGames.map((game)=>game)
+  // console.log('game',(JSON.parse(game[0].dealer_hand)).map(card=>card.image))
   return (
     <Wrapper>
       <h1 style={{ marginTop: "50px", fontSize: "2rem", fontFamily: "'Press Start 2P', cursive" }}>
@@ -42,27 +43,18 @@ function GameHistory({user}) {
               <h3>
                 {
                   "Dealer Hand: " +
-                    (game.dealer_hand
-                      ? game.dealer_hand
-                          .replace(/[[\]]/g, "")
-                          .replace(/"/g, "")
-                          .replace(/,/g, ", ")
-                          .replace(/\bnull\b/g, "Hidden Card")
-                      : "Hidden Card")
+                  JSON.parse(game.dealer_hand).map((card) => card.name).join(", ")
                 }
               </h3>
               <h3>
                 {
                   "User Hand: " +
-                    (game.user_hand
-                      ? game.user_hand
-                          .replace(/[[\]]/g, "")
-                          .replace(/"/g, "")
-                          .replace(/,/g, ", ")
-                      : "hidden card")
+                  JSON.parse(game.user_hand).map((card) => card.name).join(", ")
                 }
               </h3>
               <h3>{"Result: " + game.result}</h3>
+              <h3>{"Bet Amount: $" + game.betAmount}</h3>
+              <h3>{"New Acquired Funds: $" + game.funds}</h3>
               <Button
                 onClick={() => handleDeleteGame(game.id)}
                 style={{

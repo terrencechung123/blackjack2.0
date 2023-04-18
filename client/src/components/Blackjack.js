@@ -54,11 +54,12 @@ function Blackjack({ user }) {
         // setBetAmount(game.betAmount);
         // setFunds(game.funds);
       }
+
       console.log("game", game);
-      console.log(
-        "games",
-        games.filter((game) => game.result)
-        );
+      // console.log(
+      //   "gamesResult",
+      //   games.filter((game) => game.result)
+      //   );
       });
       fetch(`/users/${user.id}`)
       .then((response)=>response.json())
@@ -163,7 +164,7 @@ function Blackjack({ user }) {
           user_hand: userHandNames,
           user_id: user.id,
           isGameOver: true,
-          betAmount: 0,
+          // betAmount: 0,
           funds: newFunds
         }),
       });
@@ -214,7 +215,7 @@ function Blackjack({ user }) {
           user_id: user.id,
           isGameOver: true,
           gameStart:true,
-          betAmount:0,
+          // betAmount:0,
           funds: newFunds
         }),
       });
@@ -253,7 +254,8 @@ function Blackjack({ user }) {
           result: JSON.stringify(result),
           user_hand: userHandNames,
           user_id: user.id,
-          betAmount: 0,
+          // betAmount: 0,
+          // funds:'',
           isGameOver: true,
           deck: JSON.stringify(deck)
         }),
@@ -307,7 +309,7 @@ function Blackjack({ user }) {
         user_id: user.id,
         gameStart: true,
         isGameOver: true,
-        betAmount: 0,
+        // betAmount: 0,
         funds: newFunds,
       }),
     });
@@ -370,18 +372,7 @@ function Blackjack({ user }) {
     }
   }
 
-  async function updateBet(funds, bet){
-    const response = await fetch(`/games/${game.id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        funds: funds,
-        betAmount: betAmount
-      }),
-    });
-  }
+
 
   return (
     <>
