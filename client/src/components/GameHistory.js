@@ -7,6 +7,17 @@ function GameHistory({user}) {
   console.log('user',user)
   const [games, setGames] = useState([]);
 
+  const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 24px;
+`;
+
+  const GameBox = styled(Box)`
+    h2 {
+      margin-bottom: 8px;
+    }
+  `;
 
   useEffect(() => {
     fetch("/games")
@@ -31,51 +42,69 @@ function GameHistory({user}) {
   // console.log('game',(JSON.parse(game[0].dealer_hand)).map(card=>card.image))
   return (
     <Wrapper>
-      <h1 style={{ marginTop: "50px", fontSize: "2rem", fontFamily: "'Press Start 2P', cursive" }}>
+      <h1
+        style={{
+          marginTop: "50px",
+          fontSize: "2rem",
+          fontFamily: "'Press Start 2P', cursive",
+        }}
+      >
         Games
       </h1>
       {filteredGames.length > 0 ? (
-        filteredGames.map((game) => (
-          <Game key={game.id}>
-            <Box>
-              <h2>{"Game " + game.id}</h2>
-              <h3>{"User: " + game.user.username}</h3>
-              <h3>
+        <Grid>
+          {filteredGames.map((game) => (
+            <GameBox key={game.id}>
+              <h1 style={{fontSize:"35px"}}>{"Game " + game.id}</h1>
+              {/* <h3>{"User: " + game.user.username}</h3> */}
+              &nbsp;
+              <h1 style={{fontSize:"27px"}}>Dealer Hand:</h1>
+              <h2 style={{color:"#800020"}}>
                 {
-                  "Dealer Hand: " +
-                  JSON.parse(game.dealer_hand).map((card) => card.name).join(", ")
+                  JSON.parse(game.dealer_hand)
+                    .map((card) => card.name)
+                    .join(", ")
                 }
-              </h3>
-              <h3>
+              </h2>
+              &nbsp;
+              <h1>User Hand:</h1>
+              <h2 style={{color:"#800020"}}>
                 {
-                  "User Hand: " +
-                  JSON.parse(game.user_hand).map((card) => card.name).join(", ")
+                  JSON.parse(game.user_hand)
+                  .map((card) => card.name)
+                  .join(", ")
                 }
-              </h3>
-              <h3>{"Result: " + game.result}</h3>
-              <h3>{"Bet Amount: $" + game.betAmount}</h3>
-              <h3>{"Funds: $" + game.funds}</h3>
+              </h2>
+              &nbsp;
+              <h1 style={{fontSize:"27px"}}>Result:</h1>
+              <h2 style={{color:"#800020"}}>{game.result}</h2>
+              &nbsp;
+              <h1 style={{fontSize:"27px"}}>Bet Amount:</h1>
+              <h2 style={{color:"#800020"}}>{game.betAmount}</h2>
+              &nbsp;
+              <h1 style={{fontSize:"27px"}}>Funds:</h1>
+              <h2 style={{color:"#800020"}}>{game.funds}</h2>
               <Button
                 onClick={() => handleDeleteGame(game.id)}
                 style={{
                   marginRight: "10px",
                   backgroundColor: "#d12d36",
                   color: "white",
-                  marginTop:"20px"
+                  marginTop: "20px",
                 }}
               >
                 Delete game
               </Button>
-            </Box>
-          </Game>
-        ))
+            </GameBox>
+          ))}
+        </Grid>
       ) : (
         <>
           <h3>No Games Found</h3>
-          <div style={{marginTop:"20px"}}>
-          <Button as={Link} to="/blackjack">
-            Go To Game Page
-          </Button>
+          <div style={{ marginTop: "20px" }}>
+            <Button as={Link} to="/blackjack">
+              Go To Game Page
+            </Button>
           </div>
         </>
       )}

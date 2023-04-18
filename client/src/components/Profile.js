@@ -34,6 +34,7 @@ console.log('userData',userData)
 }
 
 const Wrapper = styled.section`
+    color: white;
     max-width: 800px;
     margin: 40px auto;
     transform: translate(0, 3%);
