@@ -144,10 +144,10 @@ function Blackjack({ user }) {
         user_hand: userHandNames,
         result: "In Progress",
         user_id: user.id,
-        isGameOver,
+        isGameOver: false,
         betAmount,
         funds,
-        gameStart,
+        gameStart: true
       }),
     });
     const data = await response.json(); // This will log the newly created game object
@@ -176,11 +176,13 @@ function Blackjack({ user }) {
     newUserHand.push(cards.pop());
     const userHandValue = calculateHandValue(newUserHand);
     let result;
+    let newFunds;
     if (userHandValue > 21) {
       result = "Bust!";
       setFunds(funds - betAmount);
       setBetAmount(0);
       setGameResult(result);
+      newFunds = funds - betAmount
       // betResult(result);
       setIsGameOver(true);
       const userHandNames = JSON.stringify(newUserHand.map((card) => card));
@@ -194,6 +196,9 @@ function Blackjack({ user }) {
           result: result,
           user_hand: userHandNames,
           user_id: user.id,
+          isGameOver: true,
+          betAmount: 0,
+          funds: newFunds
         }),
       });
     } else {
@@ -209,18 +214,22 @@ function Blackjack({ user }) {
         result = "You Won!";
         setFunds(funds + 3 * betAmount);
         setBetAmount(0);
+        newFunds = funds + 3 * betAmount
       } else if (dealerHandValue > userHandValue) {
         result = "You Lost!";
         setFunds(funds - betAmount);
         setBetAmount(0);
+        newFunds = funds - betAmount
       } else if (userHandValue > dealerHandValue) {
         result = "You Won!";
         setFunds(funds + 3 * betAmount);
         setBetAmount(0);
+        newFunds = funds + 3 * betAmount
       } else {
         result = "Tie!";
         setFunds(funds + betAmount);
         setBetAmount(0);
+        newFunds = funds + betAmount
       }
       setGameResult(result);
       // betResult(result);
@@ -237,6 +246,10 @@ function Blackjack({ user }) {
           result: result,
           user_hand: userHandNames,
           user_id: user.id,
+          isGameOver: true,
+          gameStart:true,
+          betAmount:0,
+          funds: newFunds
         }),
       });
     }
@@ -274,6 +287,7 @@ function Blackjack({ user }) {
           user_hand: userHandNames,
           user_id: user.id,
           betAmount: 0,
+          isGameOver: true
         }),
       });
       setGameResult(result);
