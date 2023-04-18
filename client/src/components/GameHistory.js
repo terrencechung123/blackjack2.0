@@ -28,11 +28,29 @@ function GameHistory({user}) {
   }
   const filteredGames = games.filter((game) => game.user.id === user.id);
 
+  function handleDeleteAllGames(){
+    const gameIds = filteredGames.map((game)=>game.id)
+    Promise.all(gameIds.map((id) => fetch(`/games/${id}`, {method: "DELETE"})))
+    .then(() => {
+      setGames([]);
+    });
+  }
+
   return (
     <Wrapper>
       <h1 style={{ marginTop: "50px", fontSize: "2rem", fontFamily: "'Press Start 2P', cursive" }}>
         Games
       </h1>
+      <Button
+        onClick={handleDeleteAllGames}
+        style={{
+          backgroundColor: "#d12d36",
+          color: "white",
+          marginTop:"20px",
+          marginBottom: "20px",
+        }}>
+        Delete All Games
+      </Button>
       {filteredGames.length > 0 ? (
         filteredGames.map((game) => (
           <Game key={game.id}>
@@ -92,7 +110,7 @@ function GameHistory({user}) {
 }
 
 const Wrapper = styled.section`
-  max-width: 800px;
+  max-width: 100%;
   margin: 40px auto;
   transform: translate(0, 4.5%);
 `;
