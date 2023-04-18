@@ -47,6 +47,7 @@ class Game(db.Model, SerializerMixin):
     betAmount = db.Column(db.Integer)
     funds = db.Column(db.Integer)
     gameStart = db.Column(db.Boolean)
+    deck = db.Column(db.String)
 
     cards = db.relationship('Card', secondary='game_cards', back_populates='_game_cards')
 

@@ -42,6 +42,7 @@ function Blackjack({ user }) {
           .sort((a, b) => b.createdAt - a.createdAt)
           .pop();
         if (game) {
+          setCards(JSON.parse(game.deck));
           setGameStart(game.gameStart);
           setGame(game);
           setDealerHand(JSON.parse(game.dealer_hand));
@@ -147,7 +148,8 @@ function Blackjack({ user }) {
         isGameOver: false,
         betAmount,
         funds,
-        gameStart: true
+        gameStart: true,
+        deck: JSON.stringify(deck)
       }),
     });
     const data = await response.json(); // This will log the newly created game object
@@ -268,6 +270,7 @@ function Blackjack({ user }) {
       body: JSON.stringify({
         user_hand: userHandNames,
         user_id: user.id,
+        deck: JSON.stringify(cards)
       }),
     });
     const data = await response.json();
