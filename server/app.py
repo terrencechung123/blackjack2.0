@@ -9,6 +9,8 @@ CORS(app)
 class Signup(Resource):
     def post(self):
         data = request.get_json()
+        if User.query.filter_by(username=data['username']).first() is not None:
+            return make_response({'message': 'Username already exists'}, 409)
         user = User(username=data['username'])
         user.password_hash = data['password']
         db.session.add(user)
