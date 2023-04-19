@@ -20,8 +20,11 @@ bcrypt = Bcrypt(app)
 # def serve_blackjack_js():
 #     return app.send_static_file('../src/components/Blackjack.js')
 
-@app.route('/')
 @app.route('/blackjack')
+@app.route('/leaderboards')
+@app.route('/profile')
+@app.route('/game_history')
+@app.route('/')
 @app.route('/<int:id>')
 def index(id=0):
     return render_template("index.html")
