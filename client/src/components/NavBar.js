@@ -15,7 +15,7 @@ function NavBar({ user, setUser }) {
   return (
     <Wrapper>
       <Logo>
-        <Link to="/blackjack">FlatJack</Link>
+        <Link to="/blackjack" className="logo-link">FlatJack</Link>
       </Logo>
       <Nav>
         <Button as={Link} to="/profile">
