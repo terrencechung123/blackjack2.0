@@ -19,7 +19,10 @@ function NavBar({ user, setUser }) {
       </Logo>
       <Nav>
         <Button as={Link} to="/profile">
-          Profile
+          {user.username}
+        </Button>
+        <Button as={Link} to="/leaderboards">
+          Leader Board
         </Button>
         <Button as={Link} to="/game_history">
             Game History
@@ -32,23 +35,12 @@ function NavBar({ user, setUser }) {
   );
 }
 
-const Wrapper = styled.header`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  background-color: rgba(255,255,255,0.8)
-`;
+export default NavBar;
 
 const Logo = styled.h1`
   font-family: 'Press Start 2P', cursive;
-  font-size: 3rem;
-  color: #4E79D4;
+  font-size: 4rem;
+  color: #000;
   margin: 0;
   line-height: 1;
   a {
@@ -64,4 +56,16 @@ const Nav = styled.nav`
   right: 8px;
 `;
 
-export default NavBar;
+const Wrapper = styled.header`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background-color: rgba(255,255,255,0.15)
+  `;
+

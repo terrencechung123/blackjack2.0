@@ -2,14 +2,16 @@ from flask import Flask, request, make_response, session, jsonify, abort
 from flask_restful import Resource, reqparse, Api, fields, marshal_with
 from werkzeug.exceptions import NotFound, Unauthorized
 from flask_cors import CORS
-
+import os
+from dotenv import load_dotenv
 from config import app, db, api
 from models import User, Card, Game, Game_Cards
-
 CORS(app)
 class Signup(Resource):
     def post(self):
         data = request.get_json()
+        if User.query.filter_by(username=data['username']).first() is not None:
+            return make_response({'message': 'Username already exists'}, 409)
         user = User(username=data['username'])
         user.password_hash = data['password']
         db.session.add(user)
@@ -75,7 +77,12 @@ class Games(Resource):
             user_hand = data['user_hand'],
             #user = data["user"],
             result = data["result"],
-            user_id = data["user_id"]
+            user_id = data["user_id"],
+            isGameOver = data["isGameOver"],
+            betAmount = data["betAmount"],
+            funds = data["funds"],
+            gameStart = data["gameStart"],
+            deck = data["deck"]
         )
         db.session.add(game)
         db.session.commit()
@@ -96,6 +103,8 @@ class GameById(Resource):
         response = make_response(game_dict, 200)
         return response
 
+    
+
     def delete(self, id):
         game = Game.query.filter_by(id=id).first()
         if not game:
@@ -106,6 +115,22 @@ class GameById(Resource):
         db.session.delete(game)
         db.session.commit()
         return make_response({}, 204)
+
+    def patch(self, id):
+        game = Game.query.filter_by(id=id).first()
+        if not game:
+            return make_response({
+                "error": "Game not found"
+            }, 404)
+        data = request.get_json()
+        for attr in data:
+            setattr(game, attr, data[attr])
+        db.session.add(game)
+        db.session.commit()
+        return make_response(
+            game.to_dict(),
+            202
+        )
 api.add_resource(GameById, '/games/<int:id>')
 
 

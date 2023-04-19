@@ -3,9 +3,21 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Box, Button } from "../styles";
 
-function GameHistory() {
+function GameHistory({user}) {
+  console.log('user',user)
   const [games, setGames] = useState([]);
 
+  const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 24px;
+`;
+
+  const GameBox = styled(Box)`
+    h2 {
+      margin-bottom: 8px;
+    }
+  `;
 
   useEffect(() => {
     fetch("/games")
@@ -25,52 +37,108 @@ function GameHistory() {
       }
     });
   }
+  const filteredGames = games.filter((game) => game.user.id === user.id);
+  const game = filteredGames.map((game)=>game)
+  // console.log('game',(JSON.parse(game[0].dealer_hand)).map(card=>card.image))
 
-  // function handleUpdateGame(newGame){
-  //   setGames(games => [...games, newGame])
-  // }
+  function handleDeleteAllGames() {
+    const gameIdsToDelete = games
+      .filter((game) => game.user.id === user.id)
+      .map((game) => game.id);
+    gameIdsToDelete.forEach((id) => {
+      fetch(`/games/${id}`, {
+        method: "DELETE",
+      }).then((r) => {
+        if (r.ok) {
+          setGames((games) =>
+            games.filter((game) => game.id !== id)
+          );
+        }
+      });
+    });
+  }
 
-  // async function updateGame(){
-  //   const updateData = {
-  //     result: formData.result,
-  //     card_id: formData.card_id,
-  //     user_id: formData.user_id
-  //   }
-  // }
-
-
-
-
-
-
+  
   return (
-
     <Wrapper>
-    <h1 style={{ fontSize: "2rem", fontFamily: "'Press Start 2P', cursive" }}>Games</h1>
-      {games.length > 0 ? (
-        games.map((game) => (
-          <Game key={game.id}>
-            <Box>
-              <h2>{"Game "+game.id}</h2>
-              <h3>{"User: "+game.user.username}</h3>
-              <h3>{"Result: "+game.result}</h3>
-              <h3>{"Dealer Hand: "+game.dealer_hand}</h3>
-              <h3>{"User Hand: "+game.user_hand}</h3>
-              <Button onClick={() => handleDeleteGame(game.id)} style={{marginRight: "10px", backgroundColor: "#4E79D4", color: "white"}}>
+      <h1
+        style={{
+          marginTop: "50px",
+          fontSize: "3.5rem",
+          fontFamily: "'Press Start 2P', cursive",
+          color:"white"
+        }}
+      >
+        Games
+      </h1>
+      {filteredGames.length > 0 && (
+        <Button
+          onClick={() => handleDeleteAllGames()}
+          style={{
+            marginRight: "10px",
+            backgroundColor: "#d12d36",
+            color: "white",
+            marginTop: "20px",
+          }}
+        >
+          Delete All Games
+        </Button>
+      )}
+      {filteredGames.length > 0 ? (
+        <Grid>
+          {filteredGames.map((game) => (
+            <GameBox key={game.id}>
+              <h1 style={{fontSize:"35px", textDecoration: "underline"}}>{"Game " + game.id}</h1>
+              {/* <h3>{"User: " + game.user.username}</h3> */}
+              &nbsp;
+              <h1 style={{fontSize:"27px", textDecoration: "underline"}}>Dealer Hand:</h1>
+              <h2 style={{color:"black"}}>
+                {
+                  JSON.parse(game.dealer_hand)
+                    .map((card) => card.name)
+                    .join(", ")
+                }
+              </h2>
+              &nbsp;
+              <h1 style={{textDecoration: "underline"}}>User Hand:</h1>
+              <h2 style={{color:"black"}}>
+                {
+                  JSON.parse(game.user_hand)
+                  .map((card) => card.name)
+                  .join(", ")
+                }
+              </h2>
+              &nbsp;
+              <h1 style={{fontSize:"27px",textDecoration: "underline"}}>Result:</h1>
+              <h2 style={{color:"black"}}>{game.result}</h2>
+              &nbsp;
+              <h1 style={{fontSize:"27px",textDecoration: "underline"}}>Bet Amount:</h1>
+              <h2 style={{color:"black"}}>{game.betAmount}</h2>
+              &nbsp;
+              <h1 style={{fontSize:"27px",textDecoration: "underline"}}>Funds:</h1>
+              <h2 style={{color:"black"}}>{game.funds}</h2>
+              <Button
+                onClick={() => handleDeleteGame(game.id)}
+                style={{
+                  marginRight: "10px",
+                  backgroundColor: "#d12d36",
+                  color: "white",
+                  marginTop: "20px",
+                }}
+              >
                 Delete game
               </Button>
-              <Button as={Link} to={`/update/${game.id}/edit`}>
-                Update Game
-              </Button>
-            </Box>
-          </Game>
-        ))
+            </GameBox>
+          ))}
+        </Grid>
       ) : (
         <>
           <h3>No Games Found</h3>
-          <Button as={Link} to="/blackjack">
-            Make a New Game
-          </Button>
+          <div style={{ marginTop: "20px" }}>
+            <Button as={Link} to="/blackjack">
+              Go To Game Page
+            </Button>
+          </div>
         </>
       )}
     </Wrapper>

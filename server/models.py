@@ -8,11 +8,13 @@ from sqlalchemy.ext.associationproxy import association_proxy
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
-    serialize_rules = ('-_password_hash','-games')
+    serialize_rules = ('-_password_hash','-games.user')
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
     _password_hash = db.Column(db.String)
+    betAmount = db.Column(db.Integer, default=0)
+    funds = db.Column(db.Integer, default=1000)
 
     games = db.relationship('Game', backref='user')
     cards = association_proxy('games', 'card')
@@ -36,13 +38,18 @@ class User(db.Model, SerializerMixin):
 class Game(db.Model, SerializerMixin):
     __tablename__='games'
 
-    serialize_rules = ('-card_id','-user_id','-cards','-card')
+    serialize_rules = ('-card_id','-user_id','-cards',)
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     result = db.Column(db.String)
     user_hand = db.Column(db.String)
     dealer_hand = db.Column(db.String)
+    isGameOver = db.Column(db.Boolean)
+    betAmount = db.Column(db.Integer)
+    funds = db.Column(db.Integer)
+    gameStart = db.Column(db.Boolean)
+    deck = db.Column(db.String)
 
     cards = db.relationship('Card', secondary='game_cards', back_populates='_game_cards')
 
@@ -62,7 +69,7 @@ class Game_Cards(db.Model,SerializerMixin):
 class Card(db.Model, SerializerMixin):
     __tablename__ = 'cards'
 
-    serialize_rules = ('-games','-_game_cards','-game_id')
+    serialize_rules = ('-games','-_game_cards','-game_id',)
 
     id = db.Column(db.Integer, primary_key=True)
     game_id = db.Column(db.Integer, db.ForeignKey('games.id'))
