@@ -9,16 +9,6 @@ with app.app_context():
     Card.query.delete()
     Game_Cards.query.delete()
 
-    # create users
-    users = [
-        User(username='player1', _password_hash='password1'),
-        User(username='player2', _password_hash='password2'),
-        User(username='player3', _password_hash='password3'),
-        User(username='player4', _password_hash='password4')
-    ]
-    db.session.add_all(users)
-    db.session.commit()
-
     # create cards
     cards = [
         Card(name='Ace of Hearts', value=11, suit='H', image='https://deckofcardsapi.com/static/img/AH.png'),

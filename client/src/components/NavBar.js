@@ -19,7 +19,10 @@ function NavBar({ user, setUser }) {
       </Logo>
       <Nav>
         <Button as={Link} to="/profile">
-          Profile
+          {user.username}
+        </Button>
+        <Button as={Link} to="/leaderboards">
+          Leader Board
         </Button>
         <Button as={Link} to="/game_history">
             Game History

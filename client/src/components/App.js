@@ -6,7 +6,7 @@ import Blackjack from "./Blackjack";
 import styled from "styled-components";
 import Profile from "./Profile";
 import GameHistory from "./GameHistory";
-import NewLogIn from "./NewLogIn"
+import LeaderBoards from "./LeaderBoards";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -42,9 +42,10 @@ function App() {
           <Route path="/blackjack">
             <Blackjack user={user}/>
           </Route>
-          <Route path="/newLogin">
-            <NewLogIn/>
+          <Route path="/leaderboards">
+            <LeaderBoards user={user}/>
           </Route>
+          
         </Switch>
       </MainContainer>
     </div>
