@@ -45,7 +45,6 @@ function App() {
           <Route path="/leaderboards">
             <LeaderBoards user={user}/>
           </Route>
-          
         </Switch>
       </MainContainer>
     </div>
