@@ -89,7 +89,7 @@ function Login({ setUser }) {
             </Avatar>
 
             <Typography component="h1" variant="h5">
-                {signup?'Create An Account':'Sign in'}
+                {signup?'Sign Up':'Sign In'}
             </Typography>
         {/* <div className='login-div'> */}
             <h2 style={{color:'red'}}> {formik.errors.username}</h2>
@@ -125,12 +125,12 @@ function Login({ setUser }) {
                     sx={{ mt: 3, mb: 2 }}
                     value={signup?'Create Account':'Log In'}
                     >
-                    Sign In
+                    {(signup)?'Create Account':'Log In'}
                 </Button>
                 <Grid container>
                     <Grid item xs>
                         <Link href="#" variant="body2" onClick={handleClick}>
-                            {signup?"Already have an account? Log in": "Don't have an account? Sign Up"}
+                            {signup?"Already have an account? Sign in": "Don't have an account? Sign Up"}
                         </Link>
                     </Grid>
                 </Grid>
