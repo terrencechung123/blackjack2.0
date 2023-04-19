@@ -1,0 +1,48 @@
+Blackjack App with React and Flask
+#Description
+This is a web application that allows users to play blackjack. The app is built using React and Flask, and includes various features such as profile management, leaderboards, game history, and betting functionality. The game itself includes the standard hit, stand, and double down options. Users can place bets on each round, and can choose to reset their bet amount or reset their funds at any time.
+
+Installation
+To install and run the application, follow these steps:
+
+Clone the repository to your local machine.
+  git clone https://github.com/your-username/blackjack-app.git
+Change to the project directory.
+  cd blackjack-app
+Install the required packages using npm and pip.
+  npm install
+  pip install -r requirements.txt
+
+Start the Flask server.
+  flask app.py OR gunicorn --chdir server app:app --reload OR log in to www.flatjack.render.com
+Start the React app.
+  npm start
+Open your web browser and go to http://localhost:3000 to view the application.
+
+Usage
+Profile Management
+  Users can create a profile and manage their account information using the "Profile" link in the navigation bar. They can edit their username, email address, and password.
+
+Leaderboards
+  The "Leaderboards" link in the navigation bar displays the top players based on their total winnings. Try to have the most funds to show up on the top of the leader board!
+
+Game History
+  Users can view their game history by clicking the "Game History" link in the navigation bar. They can see a list of their previous games, including the date, bet amount, and outcome.
+
+Betting
+  Before each round, users can place a bet by clicking on one of the available bet amounts ($20, $50, $100, or "All In"). The current bet amount is displayed at the bottom of the page.
+
+Game Play
+  Once a bet has been placed, the user can start the game by clicking the "Deal Cards" button. They will be dealt two cards, and the dealer will be dealt one card face up and one card face down.
+
+The user can choose to hit (receive another card), stand (keep their current hand), or double down (double their bet and receive one more card). If the user's hand exceeds 21, they lose the game.
+
+Once the user has finished their turn, the dealer will reveal their face-down card and continue playing until their hand exceeds 17. If the dealer's hand exceeds 21, the user wins the game. Otherwise, the winner is determined based on who has the higher hand value.
+
+If the user wins the game, their winnings will be added to their account balance. If they lose, their bet amount will be deducted from their account balance.
+
+Betting Controls
+  Users can reset their bet amount or reset their funds at any time using the "Reset Bet Amount" and "Reset Funds" buttons.
+
+Credits
+  This application was created by Terrence Chung. If you have any questions or feedback, please email me at terrencechung35@gmail.com.
