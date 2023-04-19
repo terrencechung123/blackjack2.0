@@ -22,6 +22,9 @@ bcrypt = Bcrypt(app)
 
 @app.route('/')
 @app.route('/blackjack')
+@app.route('/leaderboards')
+@app.route('/game_history')
+@app.route('/profile')
 @app.route('/<int:id>')
 def index(id=0):
     return render_template("index.html")
