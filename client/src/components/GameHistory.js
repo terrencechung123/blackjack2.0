@@ -110,10 +110,10 @@ function GameHistory({user}) {
               <h2 style={{color:"black"}}>{game.result}</h2>
               &nbsp;
               <h1 style={{fontSize:"27px",textDecoration: "underline"}}>Bet Amount:</h1>
-              <h2 style={{color:"black"}}>{game.betAmount}</h2>
+              <h2 style={{color:"black"}}>${game.betAmount}</h2>
               &nbsp;
               <h1 style={{fontSize:"27px",textDecoration: "underline"}}>Funds:</h1>
-              <h2 style={{color:"black"}}>{game.funds}</h2>
+              <h2 style={{color:"black"}}>${game.funds}</h2>
               <Button
                 onClick={() => handleDeleteGame(game.id)}
                 style={{
