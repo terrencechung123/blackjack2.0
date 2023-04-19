@@ -71,17 +71,19 @@ function GameHistory({user}) {
       >
         Games
       </h1>
-      <Button
-        onClick={() => handleDeleteAllGames()}
-        style={{
-          marginRight: "10px",
-          backgroundColor: "#d12d36",
-          color: "white",
-          marginTop: "20px",
-        }}
-      >
-        Delete All Games
-      </Button>
+      {filteredGames.length > 0 && (
+        <Button
+          onClick={() => handleDeleteAllGames()}
+          style={{
+            marginRight: "10px",
+            backgroundColor: "#d12d36",
+            color: "white",
+            marginTop: "20px",
+          }}
+        >
+          Delete All Games
+        </Button>
+      )}
       {filteredGames.length > 0 ? (
         <Grid>
           {filteredGames.map((game) => (
