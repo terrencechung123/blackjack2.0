@@ -19,7 +19,6 @@ function Blackjack({ user }) {
   const [gameResult, setGameResult] = useState("");
   const [isGameOver, setIsGameOver] = useState(true);
   const [game, setGame] = useState([]);
-  const [games, setGames] = useState([]);
   const [betAmount, setBetAmount] = useState(0);
   const [funds, setFunds] = useState(1000);
   const [deck,setDeck] = useState([]);
@@ -67,7 +66,7 @@ function Blackjack({ user }) {
         setBetAmount(user.betAmount);
         setFunds(user.funds);
       })
-    }, []);
+    }, [user.id]);
 
     useEffect(()=>{
       fetch(`/users/${user.id}`, {
@@ -155,7 +154,7 @@ function Blackjack({ user }) {
       // betResult(result);
       setIsGameOver(true);
       const userHandNames = JSON.stringify(newUserHand.map((card) => card));
-      const response = await fetch(`/games/${game.id}`, {
+      await fetch(`/games/${game.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -205,7 +204,7 @@ function Blackjack({ user }) {
       setIsGameOver(true);
       const dealerHandNames = JSON.stringify(newDealerHand.map((card) => card));
       const userHandNames = JSON.stringify(newUserHand.map((card) => card));
-      const response = await fetch(`/games/${game.id}`, {
+      await fetch(`/games/${game.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -247,7 +246,7 @@ function Blackjack({ user }) {
       const result = "Bust!";
       betResult(result);
       const userHandNames = JSON.stringify(newUserHand.map((card) => card));
-      const response = await fetch(`/games/${game.id}`, {
+      await fetch(`/games/${game.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -299,7 +298,7 @@ function Blackjack({ user }) {
     setIsGameOver(true);
     const dealerHandNames = JSON.stringify(newDealerHand.map((card) => card));
     const userHandNames = JSON.stringify(userHand.map((card) => card));
-    const response = await fetch(`/games/${game.id}`, {
+    await fetch(`/games/${game.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -318,13 +317,13 @@ function Blackjack({ user }) {
   }
 
   async function betResult(result) {
-    if (result == "You Lost!") {
+    if (result === "You Lost!") {
       setBetAmount(0);
-    } else if (result == "You Won!") {
+    } else if (result === "You Won!") {
       setFunds(funds + 2 * betAmount);
       setBetAmount(0);
 
-    } else if (result == "Tie!") {
+    } else if (result === "Tie!") {
       setFunds(funds + betAmount);
       setBetAmount(0);
     } else {
@@ -364,15 +363,6 @@ function Blackjack({ user }) {
     setBetAmount(0);
   }
 
-  async function addFunds() {
-    setFunds(funds + 100);
-  }
-
-  async function takeFunds() {
-    if (funds >= 100) {
-      setFunds(funds - 100);
-    }
-  }
 
   async function resetFunds(){
     if(window.confirm("Are you sure you want to reset your funds?")){
