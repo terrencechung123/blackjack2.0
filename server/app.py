@@ -2,7 +2,8 @@ from flask import Flask, request, make_response, session, jsonify, abort
 from flask_restful import Resource, reqparse, Api, fields, marshal_with
 from werkzeug.exceptions import NotFound, Unauthorized
 from flask_cors import CORS
-
+import os
+from dotenv import load_dotenv
 from config import app, db, api
 from models import User, Card, Game, Game_Cards
 CORS(app)

@@ -1,8 +1,8 @@
 """tables
 
-Revision ID: 4c5aa76afe5d
+Revision ID: 6a0fe93b69ce
 Revises: 
-Create Date: 2023-04-18 00:54:53.311793
+Create Date: 2023-04-18 23:01:24.043844
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4c5aa76afe5d'
+revision = '6a0fe93b69ce'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,6 +22,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(), nullable=True),
     sa.Column('_password_hash', sa.String(), nullable=True),
+    sa.Column('betAmount', sa.Integer(), nullable=True),
+    sa.Column('funds', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('games',
@@ -30,9 +32,11 @@ def upgrade():
     sa.Column('result', sa.String(), nullable=True),
     sa.Column('user_hand', sa.String(), nullable=True),
     sa.Column('dealer_hand', sa.String(), nullable=True),
-    sa.Column('isGameOver', sa.String(), nullable=True),
-    sa.Column('betAmount', sa.String(), nullable=True),
-    sa.Column('setFunds', sa.String(), nullable=True),
+    sa.Column('isGameOver', sa.Boolean(), nullable=True),
+    sa.Column('betAmount', sa.Integer(), nullable=True),
+    sa.Column('funds', sa.Integer(), nullable=True),
+    sa.Column('gameStart', sa.Boolean(), nullable=True),
+    sa.Column('deck', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
