@@ -40,6 +40,25 @@ function GameHistory({user}) {
   const filteredGames = games.filter((game) => game.user.id === user.id);
   const game = filteredGames.map((game)=>game)
   // console.log('game',(JSON.parse(game[0].dealer_hand)).map(card=>card.image))
+
+  function handleDeleteAllGames() {
+    const gameIdsToDelete = games
+      .filter((game) => game.user.id === user.id)
+      .map((game) => game.id);
+    gameIdsToDelete.forEach((id) => {
+      fetch(`/games/${id}`, {
+        method: "DELETE",
+      }).then((r) => {
+        if (r.ok) {
+          setGames((games) =>
+            games.filter((game) => game.id !== id)
+          );
+        }
+      });
+    });
+  }
+
+  
   return (
     <Wrapper>
       <h1
@@ -51,6 +70,17 @@ function GameHistory({user}) {
       >
         Games
       </h1>
+      <Button
+        onClick={() => handleDeleteAllGames()}
+        style={{
+          marginRight: "10px",
+          backgroundColor: "#d12d36",
+          color: "white",
+          marginTop: "20px",
+        }}
+      >
+        Delete All Games
+      </Button>
       {filteredGames.length > 0 ? (
         <Grid>
           {filteredGames.map((game) => (
