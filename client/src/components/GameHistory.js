@@ -3,10 +3,6 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Box, Button } from "../styles";
 
-function GameHistory({user}) {
-  console.log('user',user)
-  const [games, setGames] = useState([]);
-
   const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -18,6 +14,10 @@ function GameHistory({user}) {
       margin-bottom: 8px;
     }
   `;
+function GameHistory({user}) {
+  console.log('user',user)
+  const [games, setGames] = useState([]);
+
 
   useEffect(() => {
     fetch("/games")
@@ -38,9 +38,6 @@ function GameHistory({user}) {
     });
   }
   const filteredGames = games.filter((game) => game.user.id === user.id);
-  const game = filteredGames.map((game)=>game)
-  // console.log('game',(JSON.parse(game[0].dealer_hand)).map(card=>card.image))
-
   function handleDeleteAllGames() {
     const gameIdsToDelete = games
       .filter((game) => game.user.id === user.id)
@@ -151,11 +148,6 @@ const Wrapper = styled.section`
   transform: translate(0, 4.5%);
 `;
 
-const Game = styled.article`
-  margin-bottom: 24px;
-  margin-right: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0, 0.2);
-`;
 
 
 export default GameHistory;
