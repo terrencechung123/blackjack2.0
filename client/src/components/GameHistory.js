@@ -66,6 +66,7 @@ function GameHistory({user}) {
           marginTop: "50px",
           fontSize: "3.5rem",
           fontFamily: "'Press Start 2P', cursive",
+          color:"white"
         }}
       >
         Games
