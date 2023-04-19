@@ -125,7 +125,7 @@ function Login({ setUser }) {
                     sx={{ mt: 3, mb: 2 }}
                     value={signup?'Create Account':'Log In'}
                     >
-                    Sign In
+                    {signup?'Sign Up': 'Sign In'}
                 </Button>
                 <Grid container>
                     <Grid item xs>
