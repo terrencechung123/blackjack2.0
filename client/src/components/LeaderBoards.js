@@ -51,7 +51,7 @@ return (
                     "%"
                     : "0%"}
                 </td>
-                <td>{user.funds}</td>
+                <td>${user.funds}</td>
             </tr>
             ))}
         </tbody>
