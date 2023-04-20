@@ -11,6 +11,31 @@ function shuffleArray(array) {
   return array;
 }
 
+function findCardIndex(deck, card) {
+  return deck.findIndex((c) => c.name === card.name);
+}
+
+function removeCard(deck, card) {
+  const index = findCardIndex(deck, card);
+  if (index !== -1) {
+    deck.splice(index, 1);
+  }
+}
+
+function hit(deck, newDealerHand, userHand) {
+  const shuffledDeck = deck;
+  [...newDealerHand, ...userHand].forEach((card) => {
+    removeCard(shuffledDeck, card);
+  });
+  const newUserHand = [...userHand];
+  let newCard;
+  do {
+    newCard = shuffledDeck.pop();
+  } while ([...newDealerHand, ...userHand, ...newUserHand].some((card) => card.name === newCard.name));
+  newUserHand.push(newCard);
+  return newUserHand;
+}
+
 function Blackjack({ user }) {
   const [cards, setCards] = useState([]);
   const [dealerHand, setDealerHand] = useState([]);
@@ -215,21 +240,20 @@ function Blackjack({ user }) {
     }
   }
 
-  async function hit() {
+  async function handleHit() {
     //This modified code will keep drawing a new card from the deck until it finds one that is not already in any of the hands.
-    const deck = shuffleArray([...cards]);
-    [...dealerHand, ...userHand].forEach((card) => {
-      const index = deck.findIndex((c) => c.name === card.name);
-      if (index !== -1) {
-        deck.splice(index, 1);
-      }
-    });
-    const newUserHand= [...userHand]
-    let newCard;
-    do {
-      newCard = deck.pop();
-    } while ([...dealerHand, ...userHand, ...newUserHand].some((card) => card.name === newCard.name));
-    newUserHand.push(newCard);
+    // const deck = shuffleArray([...cards]);
+    // [...dealerHand, ...userHand].forEach((card) => {
+    //   const index = deck.findIndex((c) => c.name === card.name);
+    //   if (index !== -1) {
+    //     deck.splice(index, 1);
+    //   }
+    // });
+    console.log('userHand',userHand)
+    console.log('dealerHand',dealerHand)
+    const deck = [...cards]
+    const newDealerHand = [...dealerHand]
+    const newUserHand = hit(deck,newDealerHand,userHand)
     // const userHandNames = JSON.stringify(newUserHand.map((card) => card));
     // const response = await fetch(`/games/${game.id}`, {
     //     method: "PATCH",
@@ -491,7 +515,7 @@ function Blackjack({ user }) {
                   }}
                 >
                   <div style={{ marginBottom: "40px" }}>
-                    <button id="arcade-button" onClick={hit}>
+                    <button id="arcade-button" onClick={handleHit}>
                       Hit
                     </button>
                   </div>
