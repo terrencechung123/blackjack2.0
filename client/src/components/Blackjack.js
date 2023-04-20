@@ -23,7 +23,7 @@ function removeCard(deck, card) {
 }
 
 function hit(deck, newDealerHand, userHand) {
-  const shuffledDeck = deck;
+  const shuffledDeck = shuffleArray(deck);
   [...newDealerHand, ...userHand].forEach((card) => {
     removeCard(shuffledDeck, card);
   });
@@ -440,7 +440,7 @@ function Blackjack({ user }) {
               {dealerHand.map((card, index) => (
                 <img
                   key={index}
-                  src={card.image ? card.image : backCard}
+                  src={(card.image) ? card.image : backCard}
                   alt={card.name}
                 />
               ))}
@@ -544,7 +544,7 @@ function Blackjack({ user }) {
               {userHand.map((card, index) => (
                 <img
                   key={index}
-                  src={card.image ? card.image : backCard}
+                  src={card.image}
                   alt={card.name}
                 />
               ))}
