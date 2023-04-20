@@ -245,6 +245,7 @@ function Blackjack({ user }) {
           // setUserHand(newUserHand);
           // const data = await response.json();
           // setGame(data);
+          updateGame(newUserHand, game.id, user.id);
           if (calculateHandValue(newUserHand) > 21) {
             // const result = "Bust!";
             setGameResult("Bust!");
@@ -273,6 +274,21 @@ function Blackjack({ user }) {
           }
   }
 
+  async function updateGame(userHand, gameId, userId) {
+    const userHandNames = JSON.stringify(userHand.map((card) => card));
+    const response = await fetch(`/games/${gameId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_hand: userHandNames,
+        user_id: userId,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  }
 
   async function stand() {
     const deck = shuffleArray([...cards]);
