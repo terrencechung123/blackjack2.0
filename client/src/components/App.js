@@ -43,7 +43,7 @@ function App() {
             <Blackjack user={user}/>
           </Route>
           <Route path="/leaderboards">
-            <LeaderBoards user={user}/>
+            <LeaderBoards/>
           </Route>
           
         </Switch>

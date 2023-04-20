@@ -83,9 +83,9 @@ function GameHistory({user}) {
       )}
       {filteredGames.length > 0 ? (
         <Grid>
-          {filteredGames.map((game) => (
+          {filteredGames.map((game,index) => (
             <GameBox key={game.id}>
-              <h1 style={{fontSize:"35px", textDecoration: "underline"}}>{"Game " + game.id}</h1>
+              <h1 style={{fontSize:"35px", textDecoration: "underline"}}>{"Game " + (index+1)}</h1>
               {/* <h3>{"User: " + game.user.username}</h3> */}
               &nbsp;
               <h1 style={{fontSize:"27px", textDecoration: "underline"}}>Dealer Hand:</h1>

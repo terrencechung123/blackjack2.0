@@ -23,7 +23,7 @@ function Blackjack({ user }) {
   const [funds, setFunds] = useState(1000);
   const [deck,setDeck] = useState([]);
 
-  
+
   useEffect(() => {
     fetch("/cards")
     .then((r) => r.json())
@@ -32,14 +32,16 @@ function Blackjack({ user }) {
       console.log('hello')
     });
   }, []);
-  // console.log(cards)
-  
   useEffect(() => {
     fetch(`/games`)
     .then((response) => response.json())
     .then((games) => {
       const game = games
-      .filter((game) => game.user.id === user.id)
+      .filter((game) =>(game.user.id === user.id && game.result === "In Progress"))
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .pop();
+      const lastGame = games
+      .filter((game) =>(game.user.id === user.id))
       .sort((a, b) => b.createdAt - a.createdAt)
       .pop();
       if (game) {
@@ -50,23 +52,24 @@ function Blackjack({ user }) {
         setUserHand(JSON.parse(game.user_hand));
         setGameResult(game.result);
         setIsGameOver(game.isGameOver);
-        // setBetAmount(game.betAmount);
-        // setFunds(game.funds);
       }
-
-      console.log("game", game);
-      // console.log(
-      //   "gamesResult",
-      //   games.filter((game) => game.result)
-      //   );
-      });
-      fetch(`/users/${user.id}`)
-      .then((response)=>response.json())
-      .then((user)=>{
-        setBetAmount(user.betAmount);
-        setFunds(user.funds);
-      })
-    }, [user.id]);
+      if(!game && lastGame){
+        setDeck(JSON.parse(lastGame.deck));
+        setGameStart(lastGame.gameStart);
+        setGame(lastGame);
+        setDealerHand(JSON.parse(lastGame.dealer_hand));
+        setUserHand(JSON.parse(lastGame.user_hand));
+        setGameResult(lastGame.result);
+        setIsGameOver(lastGame.isGameOver);
+      }
+    });
+    fetch(`/users/${user.id}`)
+    .then((response)=>response.json())
+    .then((user)=>{
+      setBetAmount(user.betAmount);
+      setFunds(user.funds);
+    })
+  }, [user.id]);
 
     useEffect(()=>{
       fetch(`/users/${user.id}`, {
@@ -116,10 +119,9 @@ function Blackjack({ user }) {
     setDealerHand(newDealerHand);
     setUserHand(newUserHand);
     setIsGameOver(false);
+    setGameStart(true);
+    game.dealer_hand?null:window.location.reload()
     setGame(data);
-    if (gameStart===false){
-      setGameStart(true);
-      window.location.reload()}
   }
 
   function calculateHandValue(cards) {
@@ -389,7 +391,7 @@ function Blackjack({ user }) {
             {isGameOver ? (
               <div>
                 <h3>
-                  {isNaN(calculateHandValue(dealerHand))
+                  {isNaN(calculateHandValue(dealerHand))||(calculateHandValue(dealerHand)===0)
                     ? ""
                     : "Hand Value: " + calculateHandValue(dealerHand)}
                 </h3>
@@ -407,7 +409,7 @@ function Blackjack({ user }) {
                       fontSize: "36px",
                     }}
                   >
-                    {gameResult} Play Again?
+                    {gameResult? gameResult+" Play Again?":null}
                   </h1>
                   <div style={{ marginBottom: "50px" }}>
                     <button
