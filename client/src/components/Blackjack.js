@@ -133,7 +133,7 @@ function Blackjack({ user }) {
     });
 
     const newUserHand = [...userHand];
-    newUserHand.push(cards.pop());
+    newUserHand.push(deck.pop());
     const userHandValue = calculateHandValue(newUserHand);
     let result;
     let newFunds;
@@ -163,9 +163,9 @@ function Blackjack({ user }) {
       });
     } else {
       const newDealerHand = [...dealerHand];
-      newDealerHand[1] = cards.pop(); // reveal the dealer's hidden card
+      newDealerHand[1] = deck.pop(); // reveal the dealer's hidden card
       while (calculateHandValue(newDealerHand) < 17) {
-        newDealerHand.push(cards.pop()); // keep drawing cards until the dealer's hand value is at least 17
+        newDealerHand.push(deck.pop()); // keep drawing cards until the dealer's hand value is at least 17
       }
       setDealerHand(newDealerHand);
       setUserHand(newUserHand);
@@ -279,9 +279,9 @@ function Blackjack({ user }) {
       }
     });
     const newDealerHand = [...dealerHand];
-    newDealerHand[1] = cards.pop(); // reveal the dealer's hidden card
+    newDealerHand[1] = deck.pop(); // reveal the dealer's hidden card
     while (calculateHandValue(newDealerHand) < 17) {
-      newDealerHand.push(cards.pop()); // keep drawing cards until the dealer's hand value is at least 17
+      newDealerHand.push(deck.pop()); // keep drawing cards until the dealer's hand value is at least 17
     }
     setDealerHand(newDealerHand);
     const userHandValue = calculateHandValue(userHand);
