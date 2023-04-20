@@ -216,28 +216,33 @@ function Blackjack({ user }) {
   }
 
   async function hit() {
+    //This modified code will keep drawing a new card from the deck until it finds one that is not already in any of the hands.
     const deck = shuffleArray([...cards]);
     [...dealerHand, ...userHand].forEach((card) => {
-      const index = deck.findIndex((c) => c.code === card.code);
+      const index = deck.findIndex((c) => c.name === card.name);
       if (index !== -1) {
         deck.splice(index, 1);
       }
     });
     const newUserHand= [...userHand]
-    newUserHand.push(deck.pop());
+    let newCard;
+    do {
+      newCard = deck.pop();
+    } while ([...dealerHand, ...userHand, ...newUserHand].some((card) => card.name === newCard.name));
+    newUserHand.push(newCard);
     // const userHandNames = JSON.stringify(newUserHand.map((card) => card));
     // const response = await fetch(`/games/${game.id}`, {
-      //   method: "PATCH",
-      //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({
-          //     user_hand: userHandNames,
-          //     user_id: user.id,
-          //     // deck: JSON.stringify(deck)
-          //   }),
-          // });
-          // // setUserHand(newUserHand);
+    //     method: "PATCH",
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify({
+    //           user_hand: userHandNames,
+    //           user_id: user.id,
+    //           // deck: JSON.stringify(deck)
+    //         }),
+    //       });
+          // setUserHand(newUserHand);
           // const data = await response.json();
           // setGame(data);
           if (calculateHandValue(newUserHand) > 21) {
@@ -265,7 +270,6 @@ function Blackjack({ user }) {
           }
           else{
             setUserHand(newUserHand);
-            
           }
   }
 

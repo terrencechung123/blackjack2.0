@@ -20,16 +20,11 @@ function GameHistory({user}) {
 
 
   useEffect(() => {
-    const abortController = new AbortController();
-    fetch("/games", { signal: abortController.signal })
+    fetch("/games")
       .then((r) => r.json())
       .then(setGames);
-      
-      return () => {
-        abortController.abort();
-      };
     }, []);
-    
+
     const filteredGames = games.filter((game) => game.user.id === user.id);
 
   function handleDeleteGame(id) {
@@ -60,7 +55,7 @@ function GameHistory({user}) {
     });
   }
 
-  
+
   return (
     <Wrapper>
       <h1
