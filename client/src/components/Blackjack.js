@@ -19,6 +19,7 @@ function removeCard(deck, card) {
   const index = findCardIndex(deck, card);
   if (index !== -1) {
     deck.splice(index, 1);
+    deck.unshift(card);
   }
 }
 
