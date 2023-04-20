@@ -28,12 +28,15 @@ function hit(deck, newDealerHand, userHand) {
     removeCard(shuffledDeck, card);
   });
   const newUserHand = [...userHand];
+
+  function isCardAlreadyDealt(card) {
+    return newDealerHand.concat(userHand, newUserHand).some((existingCard) => existingCard.name === card.name);
+  }
+
   let newCard;
   do {
     newCard = shuffledDeck.pop();
-  } while (newDealerHand.concat(userHand).concat(newUserHand).some(function(card) {
-    return card.name === newCard.name;
-  }));
+  } while (isCardAlreadyDealt(newCard));
   newUserHand.push(newCard);
   return newUserHand;
 }
