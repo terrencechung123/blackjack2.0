@@ -31,7 +31,9 @@ function hit(deck, newDealerHand, userHand) {
   let newCard;
   do {
     newCard = shuffledDeck.pop();
-  } while ([...newDealerHand, ...userHand, ...newUserHand].some((card) => card.name === newCard.name));
+  } while (newDealerHand.concat(userHand).concat(newUserHand).some(function(card) {
+    return card.name === newCard.name;
+  }));
   newUserHand.push(newCard);
   return newUserHand;
 }
