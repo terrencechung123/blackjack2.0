@@ -15,7 +15,7 @@ function Blackjack({ user }) {
   const [cards, setCards] = useState([]);
   const [dealerHand, setDealerHand] = useState([]);
   const [userHand, setUserHand] = useState([]);
-  const [gameStart, setGameStart] = useState(false);
+  // const [gameStart, setGameStart] = useState(false);
   const [gameResult, setGameResult] = useState("");
   const [isGameOver, setIsGameOver] = useState(true);
   const [game, setGame] = useState([]);
@@ -40,27 +40,14 @@ function Blackjack({ user }) {
       .filter((game) =>(game.user.id === user.id && game.result === "In Progress"))
       .sort((a, b) => b.createdAt - a.createdAt)
       .pop();
-      const lastGame = games
-      .filter((game) =>(game.user.id === user.id))
-      .sort((a, b) => b.createdAt - a.createdAt)
-      .pop();
       if (game) {
         // setDeck(JSON.parse(game.deck));
-        setGameStart(game.gameStart);
+        // setGameStart(game.gameStart);
         setGame(game);
         setDealerHand(JSON.parse(game.dealer_hand));
         setUserHand(JSON.parse(game.user_hand));
         setGameResult(game.result);
         setIsGameOver(game.isGameOver);
-      }
-      if(!game && lastGame){
-        // setDeck(JSON.parse(lastGame.deck));
-        setGameStart(lastGame.gameStart);
-        setGame(lastGame);
-        setDealerHand(JSON.parse(lastGame.dealer_hand));
-        setUserHand(JSON.parse(lastGame.user_hand));
-        setGameResult(lastGame.result);
-        setIsGameOver(lastGame.isGameOver);
       }
     });
     fetch(`/users/${user.id}`)
@@ -111,7 +98,7 @@ function Blackjack({ user }) {
         isGameOver: false,
         betAmount,
         funds,
-        gameStart: true,
+        // gameStart: true,
         // deck: JSON.stringify(deck)
       }),
     });
@@ -121,7 +108,7 @@ function Blackjack({ user }) {
     setIsGameOver(false);
     setGame(data);
     // if (gameStart===false){
-      setGameStart(true);
+      // setGameStart(true);
       // window.location.reload()}
   }
 
@@ -226,7 +213,7 @@ function Blackjack({ user }) {
           user_hand: userHandNames,
           user_id: user.id,
           isGameOver: true,
-          gameStart:true,
+          // gameStart:true,
           // betAmount:0,
           funds: newFunds
         }),
@@ -333,7 +320,7 @@ function Blackjack({ user }) {
         result: result,
         user_hand: userHandNames,
         user_id: user.id,
-        gameStart: true,
+        // gameStart: true,
         isGameOver: true,
         // betAmount: 0,
         funds: newFunds,
@@ -399,7 +386,6 @@ function Blackjack({ user }) {
   return (
     <>
       <Wrapper>
-        {gameStart ? (
           <Box>
             <h1>Dealer: </h1>
             <p>
@@ -407,7 +393,7 @@ function Blackjack({ user }) {
                 <img
                   key={index}
                   src={card.image ? card.image : backCard}
-                  alt={`${card.value} of ${card.suit}`}
+                  alt={card.name}
                 />
               ))}
             </p>
@@ -439,7 +425,7 @@ function Blackjack({ user }) {
                       id="arcade-button"
                       onClick={() => {
                         startNewGame();
-                        setGameStart(true);
+                        // setGameStart(true);
                       }}
                     >
                       Deal Cards
@@ -511,62 +497,12 @@ function Blackjack({ user }) {
                 <img
                   key={index}
                   src={card.image ? card.image : backCard}
-                  alt={`${card.value} of ${card.suit}`}
+                  alt={card.name}
                 />
               ))}
             </p>
-            <h3>Hand Value: {calculateHandValue(userHand)}</h3>
+            <h3>{(calculateHandValue(dealerHand)===0)?null:"Hand Value: "+calculateHandValue(userHand)}</h3>
           </Box>
-        ) : (
-          <Box style={{ marginTop: "50px" }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginBottom: "50px",
-              }}
-            >
-              <button
-                id="arcade-button"
-                onClick={() => {
-                  startNewGame();
-                  setGameStart(true);
-                }}
-              >
-                Deal Cards
-              </button>
-            </div>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <div style={{ marginRight: "40px" }}>
-                <Button onClick={bet20}>Bet $20</Button>
-              </div>
-              <div style={{ marginLeft: "20px" }}>
-                <Button onClick={bet50}>Bet $50</Button>
-              </div>
-              <div style={{ marginLeft: "60px" }}>
-                <Button onClick={bet100}>Bet $100</Button>
-              </div>
-              <div style={{ marginLeft: "80px" }}>
-                <Button onClick={betAllIn}>All In</Button>
-              </div>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginBottom: "50px",
-                marginTop: "20px",
-              }}
-            >
-              <div style={{ marginLeft: "40px" }}>
-                <Button onClick={betReset}>Reset Bet Amount</Button>
-              </div>
-              <div style={{ marginLeft: "40px" }}>
-                <Button onClick={resetFunds}>Reset Funds</Button>
-              </div>
-            </div>
-          </Box>
-        )}
       </Wrapper>
       <h1 style={{ marginTop: "60px", color: "white" }}>
         Bet Amount: ${betAmount}

@@ -35,7 +35,7 @@ def upgrade():
     sa.Column('isGameOver', sa.Boolean(), nullable=True),
     sa.Column('betAmount', sa.Integer(), nullable=True),
     sa.Column('funds', sa.Integer(), nullable=True),
-    sa.Column('gameStart', sa.Boolean(), nullable=True),
+    # sa.Column('gameStart', sa.Boolean(), nullable=True),
     sa.Column('deck', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
