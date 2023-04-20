@@ -75,16 +75,13 @@ function Blackjack({ user }) {
       console.log('hi');
       const deck = shuffleArray([...cards]);
       // Remove the cards that have already been dealt in the current game
-      [...dealerHand, ...userHand].forEach((card) => {
-        const index = deck.findIndex((c) => c.code === card.code);
-        if (index !== -1) {
-          deck.splice(index, 1);
-        }
-      });
-    const newDealerHand = [cards.pop(), "*"];
-    const newUserHand = [cards.pop(), cards.pop()];
+    const newDealerHand = [deck.pop(), "*"];
+    const newUserHand = [deck.pop(), deck.pop()];
     const dealerHandNames = JSON.stringify(newDealerHand.map((card) => card));
     const userHandNames = JSON.stringify(newUserHand.map((card) => card));
+    setDealerHand(newDealerHand);
+    setUserHand(newUserHand);
+    setIsGameOver(false);
     const response = await fetch("/games", {
       method: "POST",
       headers: {
@@ -103,9 +100,6 @@ function Blackjack({ user }) {
       }),
     });
     const data = await response.json(); // This will log the newly created game object
-    setDealerHand(newDealerHand);
-    setUserHand(newUserHand);
-    setIsGameOver(false);
     setGame(data);
     // if (gameStart===false){
       // setGameStart(true);
@@ -229,47 +223,52 @@ function Blackjack({ user }) {
         deck.splice(index, 1);
       }
     });
-    const newUserHand = [...userHand];
-    newUserHand.push(cards.pop());
-    // Update the game state to reflect the new card being added to the user's hand
-    const userHandNames = JSON.stringify(newUserHand.map((card) => card));
-    const response = await fetch(`/games/${game.id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_hand: userHandNames,
-        user_id: user.id,
-        // deck: JSON.stringify(deck)
-      }),
-    });
-    const data = await response.json();
-    setGame(data);
-    setUserHand(newUserHand);
-    if (calculateHandValue(newUserHand) > 21) {
-      const result = "Bust!";
-      betResult(result);
-      const userHandNames = JSON.stringify(newUserHand.map((card) => card));
-      await fetch(`/games/${game.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          result: result,
-          user_hand: userHandNames,
-          user_id: user.id,
-          // betAmount: 0,
-          // funds:'',
-          isGameOver: true,
-          // deck: JSON.stringify(deck)
-        }),
-      });
-      setGameResult(result);
-      setIsGameOver(true);
-    }
+    const newUserHand= [...userHand]
+    newUserHand.push(deck.pop());
+    // const userHandNames = JSON.stringify(newUserHand.map((card) => card));
+    // const response = await fetch(`/games/${game.id}`, {
+      //   method: "PATCH",
+      //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
+          //     user_hand: userHandNames,
+          //     user_id: user.id,
+          //     // deck: JSON.stringify(deck)
+          //   }),
+          // });
+          // // setUserHand(newUserHand);
+          // const data = await response.json();
+          // setGame(data);
+          if (calculateHandValue(newUserHand) > 21) {
+            // const result = "Bust!";
+            setGameResult("Bust!");
+            betResult("Bust!");
+            setIsGameOver(true);
+            setUserHand(newUserHand)
+            const userHandNames = JSON.stringify(newUserHand.map((card) => card));
+            await fetch(`/games/${game.id}`, {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                result: "Bust!",
+                user_hand: userHandNames,
+                user_id: user.id,
+                // betAmount: 0,
+                // funds:'',
+                isGameOver: true,
+                // deck: JSON.stringify(deck)
+              }),
+            });
+          }
+          else{
+            setUserHand(newUserHand);
+            
+          }
   }
+
 
   async function stand() {
     const deck = shuffleArray([...cards]);
