@@ -21,14 +21,14 @@ function Blackjack({ user }) {
   const [game, setGame] = useState([]);
   const [betAmount, setBetAmount] = useState(0);
   const [funds, setFunds] = useState(1000);
-  const [deck,setDeck] = useState([]);
+  // const [deck,setDeck] = useState([]);
 
 
   useEffect(() => {
     fetch("/cards")
     .then((r) => r.json())
     .then((data) => {
-      setCards(data);
+      setCards(shuffleArray(data));
       console.log('hello')
     });
   }, []);
@@ -45,7 +45,7 @@ function Blackjack({ user }) {
       .sort((a, b) => b.createdAt - a.createdAt)
       .pop();
       if (game) {
-        setDeck(JSON.parse(game.deck));
+        // setDeck(JSON.parse(game.deck));
         setGameStart(game.gameStart);
         setGame(game);
         setDealerHand(JSON.parse(game.dealer_hand));
@@ -54,7 +54,7 @@ function Blackjack({ user }) {
         setIsGameOver(game.isGameOver);
       }
       if(!game && lastGame){
-        setDeck(JSON.parse(lastGame.deck));
+        // setDeck(JSON.parse(lastGame.deck));
         setGameStart(lastGame.gameStart);
         setGame(lastGame);
         setDealerHand(JSON.parse(lastGame.dealer_hand));
@@ -90,12 +90,12 @@ function Blackjack({ user }) {
       // Remove the cards that have already been dealt in the current game
       [...dealerHand, ...userHand].forEach((card) => {
         const index = deck.findIndex((c) => c.code === card.code);
-      if (index !== -1) {
-        deck.splice(index, 1);
-      }
-    });
-    const newDealerHand = [deck.pop(), "*"];
-    const newUserHand = [deck.pop(), deck.pop()];
+        if (index !== -1) {
+          deck.splice(index, 1);
+        }
+      });
+    const newDealerHand = [cards.pop(), "*"];
+    const newUserHand = [cards.pop(), cards.pop()];
     const dealerHandNames = JSON.stringify(newDealerHand.map((card) => card));
     const userHandNames = JSON.stringify(newUserHand.map((card) => card));
     const response = await fetch("/games", {
@@ -112,7 +112,7 @@ function Blackjack({ user }) {
         betAmount,
         funds,
         gameStart: true,
-        deck: JSON.stringify(deck)
+        // deck: JSON.stringify(deck)
       }),
     });
     const data = await response.json(); // This will log the newly created game object
@@ -120,9 +120,9 @@ function Blackjack({ user }) {
     setUserHand(newUserHand);
     setIsGameOver(false);
     setGame(data);
-    if (gameStart===false){
+    // if (gameStart===false){
       setGameStart(true);
-      window.location.reload()}
+      // window.location.reload()}
   }
 
   function calculateHandValue(cards) {
@@ -143,8 +143,16 @@ function Blackjack({ user }) {
   }
 
   async function doubleDown() {
+    const deck = shuffleArray([...cards]);
+    [...dealerHand, ...userHand].forEach((card) => {
+      const index = deck.findIndex((c) => c.code === card.code);
+      if (index !== -1) {
+        deck.splice(index, 1);
+      }
+    });
+
     const newUserHand = [...userHand];
-    newUserHand.push(deck.pop());
+    newUserHand.push(cards.pop());
     const userHandValue = calculateHandValue(newUserHand);
     let result;
     let newFunds;
@@ -174,9 +182,9 @@ function Blackjack({ user }) {
       });
     } else {
       const newDealerHand = [...dealerHand];
-      newDealerHand[1] = deck.pop(); // reveal the dealer's hidden card
+      newDealerHand[1] = cards.pop(); // reveal the dealer's hidden card
       while (calculateHandValue(newDealerHand) < 17) {
-        newDealerHand.push(deck.pop()); // keep drawing cards until the dealer's hand value is at least 17
+        newDealerHand.push(cards.pop()); // keep drawing cards until the dealer's hand value is at least 17
       }
       setDealerHand(newDealerHand);
       setUserHand(newUserHand);
@@ -227,8 +235,15 @@ function Blackjack({ user }) {
   }
 
   async function hit() {
+    const deck = shuffleArray([...cards]);
+    [...dealerHand, ...userHand].forEach((card) => {
+      const index = deck.findIndex((c) => c.code === card.code);
+      if (index !== -1) {
+        deck.splice(index, 1);
+      }
+    });
     const newUserHand = [...userHand];
-    newUserHand.push(deck.pop());
+    newUserHand.push(cards.pop());
     // Update the game state to reflect the new card being added to the user's hand
     const userHandNames = JSON.stringify(newUserHand.map((card) => card));
     const response = await fetch(`/games/${game.id}`, {
@@ -239,7 +254,7 @@ function Blackjack({ user }) {
       body: JSON.stringify({
         user_hand: userHandNames,
         user_id: user.id,
-        deck: JSON.stringify(deck)
+        // deck: JSON.stringify(deck)
       }),
     });
     const data = await response.json();
@@ -261,7 +276,7 @@ function Blackjack({ user }) {
           // betAmount: 0,
           // funds:'',
           isGameOver: true,
-          deck: JSON.stringify(deck)
+          // deck: JSON.stringify(deck)
         }),
       });
       setGameResult(result);
@@ -270,10 +285,17 @@ function Blackjack({ user }) {
   }
 
   async function stand() {
+    const deck = shuffleArray([...cards]);
+    [...dealerHand, ...userHand].forEach((card) => {
+      const index = deck.findIndex((c) => c.code === card.code);
+      if (index !== -1) {
+        deck.splice(index, 1);
+      }
+    });
     const newDealerHand = [...dealerHand];
-    newDealerHand[1] = deck.pop(); // reveal the dealer's hidden card
+    newDealerHand[1] = cards.pop(); // reveal the dealer's hidden card
     while (calculateHandValue(newDealerHand) < 17) {
-      newDealerHand.push(deck.pop()); // keep drawing cards until the dealer's hand value is at least 17
+      newDealerHand.push(cards.pop()); // keep drawing cards until the dealer's hand value is at least 17
     }
     setDealerHand(newDealerHand);
     const userHandValue = calculateHandValue(userHand);

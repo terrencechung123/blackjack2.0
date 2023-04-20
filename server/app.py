@@ -82,7 +82,7 @@ class Games(Resource):
             betAmount = data["betAmount"],
             funds = data["funds"],
             gameStart = data["gameStart"],
-            deck = data["deck"]
+            # deck = data["deck"]
         )
         db.session.add(game)
         db.session.commit()
