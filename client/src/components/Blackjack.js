@@ -119,9 +119,10 @@ function Blackjack({ user }) {
     setDealerHand(newDealerHand);
     setUserHand(newUserHand);
     setIsGameOver(false);
-    setGameStart(true);
-    game.dealer_hand?null:window.location.reload()
     setGame(data);
+    if (gameStart===false){
+      setGameStart(true);
+      window.location.reload()}
   }
 
   function calculateHandValue(cards) {
