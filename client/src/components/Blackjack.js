@@ -572,6 +572,7 @@ const Wrapper = styled.section`
   margin: 60px auto;
   margin-top: -60px;
   transform: translate(0,4.5%);
+  
 `;
 
 export default Blackjack;

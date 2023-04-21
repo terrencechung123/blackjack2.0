@@ -47,13 +47,19 @@ const Logo = styled.h1`
     color: inherit;
     text-decoration: none;
   }
+  
 `;
 
 const Nav = styled.nav`
-  display: flex;
+  display: grid;
   gap: 4px;
+  grid-template-columns: repeat(4, auto);
   position: absolute;
   right: 8px;
+  
+  @media screen and (max-width: 1200px) {
+    grid-template-columns: repeat(2, auto);
+  }
 `;
 
 const Wrapper = styled.header`
@@ -67,5 +73,6 @@ const Wrapper = styled.header`
   right: 0;
   z-index: 999;
   background-color: rgba(255,255,255,0.15)
+  
   `;
 
