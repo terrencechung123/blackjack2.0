@@ -63,6 +63,7 @@ function Blackjack({ user }) {
       console.log('hello')
     });
   }, []);
+
   useEffect(() => {
     fetch(`/games`)
     .then((response) => response.json())
@@ -89,18 +90,18 @@ function Blackjack({ user }) {
     })
   }, [user.id]);
 
-    useEffect(()=>{
-      fetch(`/users/${user.id}`, {
+  async function updateBetAndFunds(newBet, newFunds){
+      await fetch(`/users/${user.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          betAmount: betAmount,
-          funds: funds
+          betAmount: newBet,
+          funds: newFunds
         }),
-      })
-    }, [betAmount, funds,user.id]);
+      });
+  }
 
     async function startNewGame() {
       console.log('hi');
@@ -208,7 +209,6 @@ function Blackjack({ user }) {
         newFunds = funds + 3 * betAmount
       } else if (dealerHandValue > userHandValue) {
         result = "You Lost!";
-        setFunds(funds - betAmount);
         setBetAmount(0);
         newFunds = funds - betAmount
       } else if (userHandValue > dealerHandValue) {
@@ -219,8 +219,8 @@ function Blackjack({ user }) {
       } else {
         result = "Tie!";
         setFunds(funds + betAmount);
-        setBetAmount(0);
         newFunds = funds + betAmount
+        setBetAmount(0);
       }
       setGameResult(result);
       // betResult(result);
@@ -331,6 +331,12 @@ function Blackjack({ user }) {
     const newDealerHand = [...dealerHand];
     newDealerHand[1] = deck.pop(); // reveal the dealer's hidden card
     while (calculateHandValue(newDealerHand) < 17) {
+      [...newDealerHand, ...userHand].forEach((card) => {
+        const index = deck.findIndex((c) => c.code === card.code);
+        if (index !== -1) {
+          deck.splice(index, 1);
+        }
+      });
       newDealerHand.push(deck.pop()); // keep drawing cards until the dealer's hand value is at least 17
     }
     setDealerHand(newDealerHand);
@@ -380,14 +386,17 @@ function Blackjack({ user }) {
   async function betResult(result) {
     if (result === "You Lost!") {
       setBetAmount(0);
+      updateBetAndFunds(0)
     } else if (result === "You Won!") {
       setFunds(funds + 2 * betAmount);
+      updateBetAndFunds(0,funds+2*betAmount)
       setBetAmount(0);
-
     } else if (result === "Tie!") {
       setFunds(funds + betAmount);
+      updateBetAndFunds(0,funds+betAmount)
       setBetAmount(0);
     } else {
+      updateBetAndFunds(0)
       setBetAmount(0);
     }
   }
@@ -395,6 +404,7 @@ function Blackjack({ user }) {
   //betting buttons
   async function bet20() {
     if (funds >= 20) {
+      updateBetAndFunds(betAmount+20,funds-20)
       setBetAmount(betAmount + 20);
       setFunds(funds - 20);
     }
@@ -402,6 +412,7 @@ function Blackjack({ user }) {
 
   async function bet50() {
     if (funds >= 50) {
+      updateBetAndFunds(betAmount+50,funds-50)
       setBetAmount(betAmount + 50);
       setFunds(funds - 50);
     }
@@ -409,17 +420,20 @@ function Blackjack({ user }) {
 
   async function bet100() {
     if (funds >= 100) {
+      updateBetAndFunds(betAmount+100,funds-100)
       setBetAmount(betAmount + 100);
       setFunds(funds - 100);
     }
   }
 
   async function betAllIn() {
+    updateBetAndFunds(betAmount+funds,0)
     setBetAmount(betAmount + funds);
     setFunds(0);
   }
 
   async function betReset() {
+    updateBetAndFunds(0,funds+betAmount)
     setFunds(funds + betAmount);
     setBetAmount(0);
   }
@@ -427,8 +441,9 @@ function Blackjack({ user }) {
 
   async function resetFunds(){
     if(window.confirm("Are you sure you want to reset your funds?")){
-    setBetAmount(0)
-    setFunds(1000)
+      updateBetAndFunds(0,1000)
+      setBetAmount(0)
+      setFunds(1000)
     }
   }
 
