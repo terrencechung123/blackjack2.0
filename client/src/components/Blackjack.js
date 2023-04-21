@@ -334,7 +334,7 @@ function Blackjack({ user }) {
     const newDealerHand = [...dealerHand];
     newDealerHand[1] = deck.pop(); // reveal the dealer's hidden card
     while (calculateHandValue(newDealerHand) < 17) {
-      [...newDealerHand, ...userHand].forEach((card) => {
+      [newDealerHand, ...userHand].forEach((card) => {
         const index = deck.findIndex((c) => c.code === card.code);
         if (index !== -1) {
           deck.splice(index, 1);
@@ -381,6 +381,7 @@ function Blackjack({ user }) {
         // gameStart: true,
         isGameOver: true,
         // betAmount: 0,
+        funds:newFunds
       }),
     });
   }
