@@ -158,7 +158,7 @@ function Blackjack({ user }) {
   async function doubleDown() {
     const deck = shuffleArray([...cards]);
     [...dealerHand, ...userHand].forEach((card) => {
-      const index = deck.findIndex((c) => c.code === card.code);
+      const index = deck.findIndex((c) => c.name === card.name);
       if (index !== -1) {
         deck.splice(index, 1);
       }
@@ -326,7 +326,7 @@ function Blackjack({ user }) {
   async function stand() {
     const deck = shuffleArray([...cards]);
     [...dealerHand, ...userHand].forEach((card) => {
-      const index = deck.findIndex((c) => c.code === card.code);
+      const index = deck.findIndex((c) => c.name === card.name);
       if (index !== -1) {
         deck.splice(index, 1);
       }
@@ -335,7 +335,7 @@ function Blackjack({ user }) {
     newDealerHand[1] = deck.pop(); // reveal the dealer's hidden card
     while (calculateHandValue(newDealerHand) < 17) {
       [newDealerHand, ...userHand].forEach((card) => {
-        const index = deck.findIndex((c) => c.code === card.code);
+        const index = deck.findIndex((c) => c.name === card.name);
         if (index !== -1) {
           deck.splice(index, 1);
         }
