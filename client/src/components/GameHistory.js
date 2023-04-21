@@ -17,12 +17,16 @@ import { Box, Button } from "../styles";
 function GameHistory({user}) {
   console.log('user',user)
   const [games, setGames] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); 
 
 
   useEffect(() => {
     fetch("/games")
       .then((r) => r.json())
-      .then(setGames);
+      .then((data) => {
+        setGames(data);
+        setIsLoading(false); // Set loading state to false when games are loaded
+      });
     }, []);
 
     const filteredGames = games.filter((game) => game.user.id === user.id);
@@ -81,7 +85,9 @@ function GameHistory({user}) {
           Delete All Games
         </Button>
       )}
-      {filteredGames.length > 0 ? (
+      {isLoading ? ( // Show loading message if games are being loaded
+        <p>Loading games...</p>
+      ) : filteredGames.length > 0 ? (
         <Grid>
           {filteredGames.map((game,index) => (
             <GameBox key={game.id}>

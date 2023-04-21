@@ -434,7 +434,11 @@ function Blackjack({ user }) {
 
   return (
     <>
-      <Wrapper>
+          <h1 style={{ marginTop: "100px", color: "white" }}>
+        Bet Amount: ${betAmount}
+      </h1>
+      <h1 style={{ color: "white" }}>Funds: ${funds}</h1>
+      <Wrapper style={{marginTop:"-70px"}}>
           <Box>
             <h1>Dealer: </h1>
             <p>
@@ -462,8 +466,8 @@ function Blackjack({ user }) {
                 >
                   <h1
                     style={{
-                      marginBottom: "40px",
-                      marginTop: "40px",
+                      marginBottom: "30px",
+                      marginTop: "10px",
                       fontSize: "36px",
                     }}
                   >
@@ -498,8 +502,8 @@ function Blackjack({ user }) {
                     style={{
                       display: "flex",
                       justifyContent: "center",
-                      marginBottom: "50px",
-                      marginTop: "20px",
+                      // marginBottom: "50px",
+                      marginTop: "15px",
                     }}
                   >
                     <div style={{ marginRight: "40px" }}>
@@ -517,7 +521,7 @@ function Blackjack({ user }) {
                   style={{
                     display: "flex",
                     justifyContent: "center",
-                    marginTop: "50px",
+                    marginTop: "40px",
                   }}
                 >
                   <div style={{ marginBottom: "40px" }}>
@@ -553,19 +557,21 @@ function Blackjack({ user }) {
             <h3>{(calculateHandValue(dealerHand)===0)?null:"Hand Value: "+calculateHandValue(userHand)}</h3>
           </Box>
       </Wrapper>
-      <h1 style={{ marginTop: "60px", color: "white" }}>
+      {/* <h1 style={{ marginTop: "60px", color: "white" }}>
         Bet Amount: ${betAmount}
       </h1>
-      <h1 style={{ color: "white" }}>Funds: ${funds}</h1>
+      <h1 style={{ color: "white" }}>Funds: ${funds}</h1> */}
     </>
   );
 }
 
 const Wrapper = styled.section`
-  max-width: 100%;
+  max-width: 100vw;
   /* height:100vh; */
-  margin: 40px auto;
-  transform: translate(0, 4.5%);
+  /* height:100vh; */
+  margin: 60px auto;
+  margin-top: -60px;
+  transform: translate(0,4.5%);
 `;
 
 export default Blackjack;
