@@ -204,20 +204,23 @@ function Blackjack({ user }) {
       const dealerHandValue = calculateHandValue(newDealerHand);
       if (dealerHandValue > 21) {
         result = "You Won!";
+        updateBetAndFunds(0,funds+3*betAmount)
         setFunds(funds + 3 * betAmount);
         setBetAmount(0);
         newFunds = funds + 3 * betAmount
       } else if (dealerHandValue > userHandValue) {
         result = "You Lost!";
         setBetAmount(0);
-        newFunds = funds - betAmount
+        updateBetAndFunds(0)
       } else if (userHandValue > dealerHandValue) {
         result = "You Won!";
+        updateBetAndFunds(0,funds+3*betAmount)
         setFunds(funds + 3 * betAmount);
         setBetAmount(0);
         newFunds = funds + 3 * betAmount
       } else {
         result = "Tie!";
+        updateBetAndFunds(0,funds+betAmount)
         setFunds(funds + betAmount);
         newFunds = funds + betAmount
         setBetAmount(0);
@@ -378,7 +381,6 @@ function Blackjack({ user }) {
         // gameStart: true,
         isGameOver: true,
         // betAmount: 0,
-        funds: newFunds,
       }),
     });
   }
