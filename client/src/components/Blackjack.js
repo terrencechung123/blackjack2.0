@@ -73,8 +73,6 @@ function Blackjack({ user }) {
       .sort((a, b) => b.createdAt - a.createdAt)
       .pop();
       if (game) {
-        // setDeck(JSON.parse(game.deck));
-        // setGameStart(game.gameStart);
         setGame(game);
         setDealerHand(JSON.parse(game.dealer_hand));
         setUserHand(JSON.parse(game.user_hand));
@@ -179,12 +177,10 @@ function Blackjack({ user }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          // dealer_hand: dealerHandNames,
           result: result,
           user_hand: userHandNames,
           user_id: user.id,
           isGameOver: true,
-          // betAmount: 0,
           funds: newFunds
         }),
       });
@@ -221,7 +217,6 @@ function Blackjack({ user }) {
         setBetAmount(0);
       }
       setGameResult(result);
-      // betResult(result);
       setIsGameOver(true);
       const dealerHandNames = JSON.stringify(newDealerHand.map((card) => card));
       const userHandNames = JSON.stringify(newUserHand.map((card) => card));
@@ -236,8 +231,6 @@ function Blackjack({ user }) {
           user_hand: userHandNames,
           user_id: user.id,
           isGameOver: true,
-          // gameStart:true,
-          // betAmount:0,
           funds: newFunds
         }),
       });
