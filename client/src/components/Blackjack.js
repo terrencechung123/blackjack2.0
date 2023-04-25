@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Box, Button } from "../styles";
 const backCard = "https://deckofcardsapi.com/static/img/back.png";
-// import style from './index.css'
+
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -46,13 +46,13 @@ function Blackjack({ user }) {
   const [cards, setCards] = useState([]);
   const [dealerHand, setDealerHand] = useState([]);
   const [userHand, setUserHand] = useState([]);
-  // const [gameStart, setGameStart] = useState(false);
+
   const [gameResult, setGameResult] = useState("");
   const [isGameOver, setIsGameOver] = useState(true);
   const [game, setGame] = useState([]);
   const [betAmount, setBetAmount] = useState(0);
   const [funds, setFunds] = useState(1000);
-  // const [deck,setDeck] = useState([]);
+
 
 
   useEffect(() => {
@@ -127,15 +127,10 @@ function Blackjack({ user }) {
         isGameOver: false,
         betAmount,
         funds,
-        // gameStart: true,
-        // deck: JSON.stringify(deck)
       }),
     });
     const data = await response.json(); // This will log the newly created game object
     setGame(data);
-    // if (gameStart===false){
-      // setGameStart(true);
-      // window.location.reload()}
   }
 
   function calculateHandValue(cards) {
@@ -250,37 +245,14 @@ function Blackjack({ user }) {
   }
 
   async function handleHit() {
-    //This modified code will keep drawing a new card from the deck until it finds one that is not already in any of the hands.
-    // const deck = shuffleArray([...cards]);
-    // [...dealerHand, ...userHand].forEach((card) => {
-    //   const index = deck.findIndex((c) => c.name === card.name);
-    //   if (index !== -1) {
-    //     deck.splice(index, 1);
-    //   }
-    // });
+
     console.log('userHand',userHand)
     console.log('dealerHand',dealerHand)
     const deck = [...cards]
     const newDealerHand = [...dealerHand]
     const newUserHand = hit(deck,newDealerHand,userHand)
-    // const userHandNames = JSON.stringify(newUserHand.map((card) => card));
-    // const response = await fetch(`/games/${game.id}`, {
-    //     method: "PATCH",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify({
-    //           user_hand: userHandNames,
-    //           user_id: user.id,
-    //           // deck: JSON.stringify(deck)
-    //         }),
-    //       });
-          // setUserHand(newUserHand);
-          // const data = await response.json();
-          // setGame(data);
           updateGame(newUserHand, game.id, user.id);
           if (calculateHandValue(newUserHand) > 21) {
-            // const result = "Bust!";
             setGameResult("Bust!");
             betResult("Bust!");
             setIsGameOver(true);
@@ -295,10 +267,7 @@ function Blackjack({ user }) {
                 result: "Bust!",
                 user_hand: userHandNames,
                 user_id: user.id,
-                // betAmount: 0,
-                // funds:'',
                 isGameOver: true,
-                // deck: JSON.stringify(deck)
               }),
             });
           }
@@ -378,9 +347,7 @@ function Blackjack({ user }) {
         result: result,
         user_hand: userHandNames,
         user_id: user.id,
-        // gameStart: true,
         isGameOver: true,
-        // betAmount: 0,
         funds:newFunds
       }),
     });
@@ -404,7 +371,6 @@ function Blackjack({ user }) {
     }
   }
 
-  //betting buttons
   async function bet20() {
     if (funds >= 20) {
       updateBetAndFunds(betAmount+20,funds-20)
@@ -440,7 +406,6 @@ function Blackjack({ user }) {
     setFunds(funds + betAmount);
     setBetAmount(0);
   }
-
 
   async function resetFunds(){
     if(window.confirm("Are you sure you want to reset your funds?")){
